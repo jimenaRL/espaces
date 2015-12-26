@@ -11,7 +11,13 @@ import numpy as np
 import signals
 
 def convolve_audio(array_1,array_2,mode='full'):
-    """ Convolves two 1-dim arrays using fftconvolve from scipy.signal 
+    """ Convolves two 1-dim arrays using fftconvolve from scipy.
+        The length of the convolved array is given by the convolution mode as
+
+        'full'  -> len(array_1)+len(array_2)-1
+        'same'  -> len(array_1)-len(array_2)+1
+        'valid' -> max(len(array_1),len(array_2))
+
     """
     if not array_1.ndim==1==array_2.ndim:
         raise ValueError('Both arrays to convolve must be one dimensional.')
@@ -22,10 +28,10 @@ def convolve_audio(array_1,array_2,mode='full'):
     return conv_signal
 
 def convolve_signals(sig_1,sig_2,mode='full'):
-    """ TO WRTITE """
+    """ TO WRITE """
     if not sig_1.fs==sig_2.fs:
         raise ValueError('Both signals to convolve must have the same sampling rate.')
-    cv = convolve_audio(sig_1.data[:,0],sig_2.data[:,0],mode='full')
+    cv = convolve_audio(sig_1.data[:,0],sig_2.data[:,0],mode=mode)
     return signals.Signal(cv,sig_1.fs)
 
 def convolve_paths(audio_path_1,audio_path_2,mode='full'):
