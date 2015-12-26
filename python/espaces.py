@@ -17,7 +17,7 @@ from signals import Signal
 
 from eigenvalues import one_torus
 from green_fn import compute_green_fn
-from convolutions import convolve
+from convolutions import convolve_signals
 
 # add to python path
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
@@ -46,10 +46,9 @@ def espaces(torus_j_max,L,duration,path_es):
     green_fn_0 = compute_green_fn(sound_speed, viscosity, eigen_vals, duration, sampling_rate)
     sig_gf = Signal(green_fn_0,fs=sampling_rate,mono=True,normalize=True)
 
-
     # convolve emitted sound with the green function and save it
     print "\tperforming convolution..."
-    sig_cv = convolve(sig_gf,sig_es,mode='full',kind='ss')
+    sig_cv = convolve_signals(sig_gf,sig_es,mode='full',kind='ola')
 
     # save audio and image
     sig_es.write(es_au_path)

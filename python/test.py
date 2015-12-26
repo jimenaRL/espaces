@@ -2,7 +2,7 @@ import os
 
 from utils import  open_osx
 
-from convolutions import convolve
+from convolutions import convolve_signals
 from signals import Signal
 
 # add to python path
@@ -19,10 +19,10 @@ if __name__:
     sig_ex = Signal(path_ex,mono=True)
 
     # convolved signal
-    mode = 'full'
-    kind = 'ss' #'ola'
+    mode = 'full' # 'full' or 'valid' or 'same'
+    kind = 'ola' # 'ola' or 'ss'
 
-    sig_cv = convolve(sig_ir,sig_ex,mode,kind)
+    sig_cv = convolve_signals(sig_ex, sig_ir, mode, kind)
 
     # save audio and image
     for name in ['ex','ir','cv']:
@@ -31,5 +31,5 @@ if __name__:
         save_im = save_path+'_'+mode+'.png'
         sig = locals()['sig_'+name]
         sig.write(save_au)
-        sig.save_image(save_im, title=name+' '+mode)
+        sig.save_image(save_im, title=name+' '+mode+' '+kind)
         open_osx(save_au,save_im)
