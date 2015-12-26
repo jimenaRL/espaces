@@ -6,6 +6,7 @@
 #                                                                            */
 # -------------------------------------------------------------------------- */
 
+import numpy as np
 
 def one_torus(c,L,j_max):
     """ Returns the eigen-values of a 1-torus in a list. 

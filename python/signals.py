@@ -268,4 +268,3 @@ class Signal():
         ax.set_xlabel('seconds')
 
         fig.savefig(file_name)
-        print 'Figure saved at %s' % file_name
