@@ -250,3 +250,22 @@ class Signal():
         stream.stop_stream()
         stream.close()
         p.terminate()
+
+    def save_max_format(self,file_name):
+        """ Saves signal in a file file for Max ~pfft object """
+        with open(file_name, 'w') as f:
+            for t in range(len(self.data)):
+                f.write('%i,%f\n' % (t,self.data[t]))
+
+    def save_image(self,file_name,title=''):
+        """ Saves an image of the signal """
+        import matplotlib.pyplot as plt
+        t_plot  = np.linspace(0.0, self.length/self.fs, self.length)
+        fig, ax = plt.subplots(1,figsize=(8, 8))
+
+        ax.plot(t_plot,self.data,'g')
+        ax.set_title(title)
+        ax.set_xlabel('seconds')
+
+        fig.savefig(file_name)
+        print 'Figure saved at %s' % file_name

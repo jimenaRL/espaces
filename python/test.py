@@ -11,21 +11,24 @@ ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 if __name__:
 
     # impulse reponse 
-    path_ir = os.path.join(ESPACES_PROJECT,'data','examples','ir_align1.wav')
+    path_ir = os.path.join(ESPACES_PROJECT,'data','examples','ir.wav')
     sig_ir = Signal(path_ir,mono=True)
 
     # audio example
-    path_ex = os.path.join(ESPACES_PROJECT,'data','examples','man2_48.wav')
+    path_ex = os.path.join(ESPACES_PROJECT,'data','examples','speech.wav')
     sig_ex = Signal(path_ex,mono=True)
 
     # convolved signal
-    sig_cv = convolve(sig_ir,sig_ex,mode='full')
+    for mode in ['same','full','valid']:
 
-    # save audio and image
-    for name in ['ex','ir','cv']:
-        save_path = os.path.join(ESPACES_PROJECT,'data','examples','to_erase_'+name)
-        sig = locals()['sig_'+name]
-        sig.write(save_path+'.wav')
-        sig.save_image(save_path+'.png', title=name)
+        sig_cv = convolve(sig_ir,sig_ex,mode)
 
-        open_osx(save_path+'.png',save_path+'.wav')
+        # save audio and image
+        for name in ['ex','ir','cv']:
+            save_path = os.path.join(ESPACES_PROJECT,'data','examples','to_erase_'+name)
+            save_au = save_path+'_'+mode+'.wav'
+            save_im = save_path+'_'+mode+'.png'
+            sig = locals()['sig_'+name]
+            sig.write(save_au)
+            sig.save_image(save_im, title=name+' '+mode)
+            open_osx(save_au,save_im)
