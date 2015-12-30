@@ -9,6 +9,7 @@
 # All units in International System of Units (SI)
 
 import os
+import sys
 
 import numpy as np
 
@@ -22,11 +23,14 @@ from convolutions import convolve_signals
 # add to python path
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 
-def espaces(torus_j_max,L,duration,path_es):
+def espaces(path_es,torus_j_max=100,L=10,duration=1):
 
     ## set physical parameters
     sound_speed   = 3.4e2
     viscosity     = 1.7e-5
+
+    for key in locals().keys():
+        print '%s : %s' % (key,locals()[key])
 
     # set saving paths
     gf_im_path, gf_au_path = set_paths('green_fn',torus_j_max,L,duration)
@@ -51,6 +55,7 @@ def espaces(torus_j_max,L,duration,path_es):
     sig_cv = convolve_signals(sig_gf,sig_es,mode='full',kind='ola')
 
     # save audio and image
+    print "\tsaving files..."
     sig_es.write(es_au_path)
     sig_es.save_image(es_im_path, title='emitted sound')
 
@@ -65,17 +70,30 @@ def espaces(torus_j_max,L,duration,path_es):
 
 if __name__:
 
-    # set emited sound
-    path_es = os.path.join(ESPACES_PROJECT,'data','examples','speech.wav')
+     # set emited sound
+    if len(sys.argv)>=2:
+        path_es = sys.argv[1]
+    else:
+        path_es = os.path.join(ESPACES_PROJECT,'data','examples','ir.wav')
 
-    # ## settings 
-    # # NOTE : the physical bound for the 1-torus eigen-values is
-    # #              int(np.square(sound_speed/viscosity))
-    # #        but this leads to a memory allocation error.
-    torus_j_max   = 10
-    torus_lengths = [100] # np.linspace(1e-2,1e4,10) # [1e-2,1e-1,1e-0,1e1,1e2,1e3,1e4]
-    duration      = 1.0
+    ## other settings 
+    # NOTE : the physical bound for the 1-torus eigen-values is
+    #              int(np.square(sound_speed/viscosity))
+    #        but this leads to a memory allocation error.
+    if len(sys.argv)>=3:
+        torus_j_max = int(sys.argv[2])
+    else:
+        torus_j_max   = 10
 
-    for L in torus_lengths: 
-        print "\tlength : %1.2f" % L
-        espaces(torus_j_max,L,duration,path_es)
+    if len(sys.argv)>=4:
+        torus_lengths = [np.float32(sys.argv[3])]
+    else:
+        torus_lengths = [100]
+
+    if len(sys.argv)>=4:
+        duration = np.float32(sys.argv[4])
+    else:
+        duration  = 1.0
+
+    for L in torus_lengths:
+        espaces(path_es,torus_j_max,L,duration)
