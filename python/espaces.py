@@ -52,7 +52,7 @@ def espaces(path_es,torus_j_max=100,L=10,duration=1):
 
     # convolve emitted sound with the green function and save it
     print "\tperforming convolution..."
-    sig_cv = convolve_signals(sig_gf,sig_es,mode='full',kind='ola')
+    sig_cv = convolve_signals(sig_es,sig_gf,mode='full',kind='ola')
 
     # save audio and image
     print "\tsaving files..."
@@ -70,11 +70,11 @@ def espaces(path_es,torus_j_max=100,L=10,duration=1):
 
 if __name__:
 
-     # set emited sound
+    # set emited sound
     if len(sys.argv)>=2:
         path_es = sys.argv[1]
     else:
-        path_es = os.path.join(ESPACES_PROJECT,'data','examples','ir.wav')
+        path_es = os.path.join(ESPACES_PROJECT,'data','examples','speech.wav')
 
     ## other settings 
     # NOTE : the physical bound for the 1-torus eigen-values is
