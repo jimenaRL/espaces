@@ -50,7 +50,7 @@ def convolve_ola(signal, impulse_response):
         cv[M:M+Nfft*np.floor(N/2.0)] += cv_buff[:,1::2].reshape((Nfft*np.floor(N/2.0)), order='F')
         output_data[:,k] = cv;
 
-    return signals.Signal(output_data, fs=signal.fs)
+    return signals.Signal(output_data, fs=signal.fs,normalize=True)
 
 def convolve_scipy(sig_1,sig_2,mode='full'):
     """ Convolves two signals using fftconvolve from scipy.
@@ -68,7 +68,7 @@ def convolve_scipy(sig_1,sig_2,mode='full'):
     conv_data = np.zeros((output_length, sig_1.n_chan))
     for k in range(sig_1.n_chan):
         conv_data[:,k] = ss.fftconvolve(sig_1.data[:,k], sig_2.data[:,k], mode=mode)
-    return signals.Signal(conv_data, fs=sig_1.fs)
+    return signals.Signal(conv_data, fs=sig_1.fs,normalize=True)
 
 def convolve_signals(sig_1,sig_2,mode='full',kind='ss'):
     """ TO WRITE """

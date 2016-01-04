@@ -38,7 +38,7 @@ def espaces(path_es,torus_j_max=100,L=10,duration=1):
     es_im_path, es_au_path = set_paths('es',torus_j_max,L,duration)
 
     # read and save audio for emitted sound
-    sig_es = Signal(path_es,mono=True)
+    sig_es = Signal(path_es,mono=True,normalize=True)
     sampling_rate = sig_es.fs
 
     # compute 1-torus eigen-values
@@ -50,9 +50,10 @@ def espaces(path_es,torus_j_max=100,L=10,duration=1):
     green_fn_0 = compute_green_fn(sound_speed, viscosity, eigen_vals, duration, sampling_rate)
     sig_gf = Signal(green_fn_0,fs=sampling_rate,mono=True,normalize=True)
 
+
     # convolve emitted sound with the green function and save it
     print "\tperforming convolution..."
-    sig_cv = convolve_signals(sig_es,sig_gf,mode='full',kind='ola')
+    sig_cv = convolve_signals(sig_es,sig_gf,kind='ola')
 
     # save audio and image
     print "\tsaving files..."
@@ -74,7 +75,7 @@ if __name__:
     if len(sys.argv)>=2:
         path_es = sys.argv[1]
     else:
-        path_es = os.path.join(ESPACES_PROJECT,'data','examples','speech.wav')
+        path_es = os.path.join(ESPACES_PROJECT,'data','examples','speech_long.wav')
 
     ## other settings 
     # NOTE : the physical bound for the 1-torus eigen-values is
@@ -83,7 +84,7 @@ if __name__:
     if len(sys.argv)>=3:
         torus_j_max = int(sys.argv[2])
     else:
-        torus_j_max   = 10
+        torus_j_max   = 100
 
     if len(sys.argv)>=4:
         torus_lengths = [np.float32(sys.argv[3])]

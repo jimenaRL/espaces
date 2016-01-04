@@ -69,9 +69,12 @@ class Signal():
             raise ValueError("Negative duration: %1.2fs (crop=[%1.2f,%1.2f])" %(crop[1]-crop[0],crop[0],crop[1]))
 
 
-        if isinstance(data, str) and  os.path.exists(data): # init the signal with a file path
-            self.load_from_file(data, crop, fs=fs)
-            crop = None
+        if isinstance(data, str):
+            if os.path.exists(data): # init the signal with a file path
+                self.load_from_file(data, crop, fs=fs)
+                crop = None
+            else:
+                raise ValueError('File %s doesn\'t exist.'%data)
         else:
             self.data = np.array(data)
             # remove any nans or infs data
