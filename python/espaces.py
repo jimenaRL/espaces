@@ -10,6 +10,7 @@
 
 import os
 import sys
+import time
 
 import numpy as np
 
@@ -43,17 +44,23 @@ def espaces(path_es,torus_j_max=100,L=10,duration=1):
 
     # compute 1-torus eigen-values
     print "\tcomputing 1-torus eigen-values..."
+    start_t = time.time()
     eigen_vals = one_torus(sound_speed,L,torus_j_max)
+    print "eigen-values computation took %1.3f milliseconds" % ((time.time() -start_t)*1e3)
 
     # compute and save green function
     print "\tcomputing green function..."
+    start_t = time.time()
     green_fn_0 = compute_green_fn(sound_speed, viscosity, eigen_vals, duration, sampling_rate)
+    print "green_fn_0 computation took %1.3f milliseconds" % ((time.time() -start_t)*1e3)
     sig_gf = Signal(green_fn_0,fs=sampling_rate,mono=True,normalize=True)
 
 
     # convolve emitted sound with the green function and save it
     print "\tperforming convolution..."
+    start_t = time.time()
     sig_cv = convolve_signals(sig_es,sig_gf,kind='ola')
+    print "convolution computation took %1.3f milliseconds" % ((time.time() -start_t)*1e3)
 
     # save audio and image
     print "\tsaving files..."
