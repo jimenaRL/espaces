@@ -13,6 +13,12 @@ from datetime import date
 # add to python path
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 
+def list2str(lst):
+    lst_str = ''
+    for l in range(len(lst)-2): lst_str += (str(lst[l])+'_')
+    lst_str += str(lst[len(lst)-1])
+    return lst_str
+
 def open_osx(*args):
     """ """
     if sys.platform=='darwin':
@@ -45,12 +51,16 @@ def set_folders():
 
 def set_paths(type,torus_j_max=None,L=None,duration=None):
     """ """
+
+    L = list2str(L)
+    torus_j_max = list2str(torus_j_max)
+
     if type=='green_fn':
-        name  = 'green_function_from_eigen_vals_j_max_%i_torus_length_%1.2f_%1.1f_sec' % (torus_j_max,L,duration)
+        name  = 'green_function_from_eigen_vals_j_max_%s_torus_length_%s_%1.1f_sec' % (torus_j_max,L,duration)
         im_folder = set_folders()['green_fn_im']
         au_folder = set_folders()['green_fn_au']
     elif type=='cv':
-        name = 'conv_j_max_%i_torus_length_%1.2f_%1.1f_sec' % (torus_j_max,L,duration)
+        name = 'conv_j_max_%s_torus_length_%s_%1.1f_sec' % (torus_j_max,L,duration)
         im_folder = set_folders()['cv_im']
         au_folder = set_folders()['cv_au']
     elif type=='es':
