@@ -6,11 +6,12 @@
 #                                                                            */
 # -------------------------------------------------------------------------- */
 
-import scipy.signal as ss
 import numpy as np
 
+import scipy.signal as ss
+from scipy.fftpack import fft, ifft
+
 import signals
-import fft
 
 def convolve_ola(signal, impulse_response):
     """
@@ -38,11 +39,11 @@ def convolve_ola(signal, impulse_response):
             x_buff[0:x.shape[0]-np.floor(x.shape[0]/float(M))*M,-1] = x[np.floor(x.shape[0]/float(M))*M:];
 
 
-        x_buff_ft = fft.fft(x_buff, n=Nfft, axis=0)
+        x_buff_ft = fft(x_buff, n=Nfft, axis=0)
 
-        h_ft = fft.fft(h, n=Nfft)
+        h_ft = fft(h, n=Nfft)
 
-        cv_buff = np.real(fft.ifft(h_ft.reshape((Nfft,1))*x_buff_ft, axis=0))
+        cv_buff = np.real(ifft(h_ft.reshape((Nfft,1))*x_buff_ft, axis=0))
 
         cv = np.zeros(max(Nfft*np.ceil(N/2.0),M+Nfft*(N/2)));
 
