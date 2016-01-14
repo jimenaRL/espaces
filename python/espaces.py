@@ -91,7 +91,7 @@ if __name__:
     if len(sys.argv)>=3:
         torus_j_max = int(sys.argv[2])
     else:
-        torus_j_max   = [3]
+        torus_j_max = [1000]
 
     if len(sys.argv)>=4:
         torus_lengths = [np.float32(sys.argv[3])]

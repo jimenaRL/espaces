@@ -56,12 +56,13 @@ def n_torus(c=340,L=[1,2],j_max=1,n=2):
         raise ValueError("Size of j_max must be %i, found %i" % (n,len(j_max)))
     else:
         j_max = np.int64(j_max)
-    if n==1:
-        return one_torus(c,L,j_max)
-    elif n==2:
-        return two_torus(c,L,j_max)
-    else:
-        k_list =  [ [2*np.pi*i/L[index] for i in range(-j_max[index],j_max[index]+1)] for index in range(n) ]
+    # if n==1:
+    #     return one_torus(c,L,j_max)
+    # elif n==2:
+    #     return two_torus(c,L,j_max)
+    # else:
+    if True:
+        k_list =  [ [np.square(2*np.pi*j/L[index]) for j in range(-j_max[index],j_max[index]+1)] for index in range(n) ]
         cartesian_prod = itertools.product(*k_list)
         return np.array([l for l in cartesian_prod]).flatten()
 
