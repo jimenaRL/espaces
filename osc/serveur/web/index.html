@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>::: sound espaces :::</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" type="text/css" media="all" href="espaces.css"></link>
+
+        <script src="bower_components/osc.js/dist/osc-browser.min.js"></script>
+        <script type="text/javascript">
+
+            var port = new osc.WebSocketPort({
+                url: "ws://localhost:8080"
+            });
+
+            port.on("message", function (oscMessage) {
+                $("#message").text(JSON.stringify(oscMessage, undefined, 2));
+                console.log("message", oscMessage);
+            });
+
+            port.open();
+
+            var sendMessage = function (parameter) {
+                port.send({
+                    address: "/espaces",
+                    args: [parameter]
+                });
+            };
+
+        </script>
+    </head>
+
+
+
+    <body>
+
+        <div class='container'>
+
+            <div class='top'></div>
+
+            <div class="row">
+
+                <div class="col-4">
+                    <div id="container" >
+                        <a class="/" href="">
+                            <img class="original_score_hover" onclick="sendMessage(0)" src="images/T3.jpg"/>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div id="container" >
+                        <a class="/" href="">
+                            <img class="original_score_hover" onclick="sendMessage(1)" src="images/T3.jpg"/>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div id="container" >
+                        <a class="/" href="">
+                            <img class="original_score_hover" onclick="sendMessage(2)" src="images/T3.jpg"/>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-4">
+                    <div id="container" >
+                        <a class="/" href="">
+                            <img class="original_score_hover" onclick="sendMessage(3)" src="images/T3.jpg"/>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div id="container" >
+                        <a class="/" href="">
+                            <img class="original_score_hover" onclick="sendMessage(4)" src="images/T3.jpg"/>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div id="container" >
+                        <a class="/" href="">
+                            <img class="original_score_hover" onclick="sendMessage(5)" src="images/T3.jpg"/>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
