@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>::: sound espaces :::</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" type="text/css" media="all" href="css/base.css"></link>
+        <link rel="stylesheet" type="text/css" media="all" href="css/style.css"></link>
+
+        <script src="bower_components/osc.js/dist/osc-browser.min.js"></script>
+        <script type="text/javascript">
+            var port = new osc.WebSocketPort({
+                url: "ws://localhost:8080"
+            });
+            port.on("message", function (oscMessage) {
+                $("#message").text(JSON.stringify(oscMessage, undefined, 2));
+                console.log("message", oscMessage);
+            });
+            port.open();
+            var sendMessage = function (parameter) {
+                port.send({
+                    address: "/espaces",
+                    args: [parameter]
+                });
+            };
+        </script>
+
+        <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+    </head>
+
+
+    <body>
+
+        <div id='names'>
+            <div class='eq'> $$\text{ :: } P.Berger \text{ :: } S.Krakowski \text{ :: } J.Royo-Letelier \text{ :: }$$ </div>
+        </div>
+
+        <div id='center'>
+            <div class='eq'> $$ sound \hspace{0.25cm} equation$$ </div>
+            <div class='eq'>
+                \begin{eqnarray}
+                    \partial_t P - (c^2 + 2\nu\partial_t) \Delta P &=& Input  \\  \\
+                    \partial_t G - (c^2 + 2\nu\partial_t) \Delta G &=&  \delta  \\ \\
+                    G(t) &=& \sum_{\lambda \in \text{Spec} \Delta}  e^{-\lambda\nu \cdot t \pm i\cdot t \cdot \sqrt{\lambda c^2 - \nu^2  \lambda^2}}\\ \\
+                    P &=&conv(G,Input)
+                \end{eqnarray}
+            </div>
+
+        </div>
+
+        <div id='center'>
+            <div class='eq'> $$geometry$$ </div>
+            <img src="images/image_espace.png"/>
+        </div>
+
+
+        <div id='navigation'>
+
+            <div class="row">
+
+                <div class="col-2">
+                   <div class='eq'> $$\leftarrow \, previous$$</div>
+                </div>
+
+                <div class="col-2">
+                   <div class='eq'> $$\mathbb{T}^2$$</div>
+                </div>
+
+                <div class="col-2">
+                   <div class='eq'> $$\mathbb{T}^2 \times \mathbb{S}^2$$</div>
+                </div>
+
+                <div class="col-2">
+                   <div class='eq'> $$\mathbb{S}^3$$</div>
+                </div>
+
+                <div class="col-2">
+                   <div class='eq'> $$\mathbb{NIL}$$</div>
+                </div>
+
+                <div class="col-2">
+                   <div class='eq'> $$\rightarrow \, next$$</div>
+                </div>
+
+            </div>
+
+        </div>
+
+</body>
+
+</html>

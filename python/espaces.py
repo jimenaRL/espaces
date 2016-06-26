@@ -91,12 +91,12 @@ if __name__:
     if len(sys.argv)>=3:
         torus_j_max = int(sys.argv[2])
     else:
-        torus_j_max = [1000]
+        torus_j_max = [50,50,50]
 
     if len(sys.argv)>=4:
         torus_lengths = [np.float32(sys.argv[3])]
     else:
-        torus_lengths = [100]
+        torus_lengths = [100,50,25]
 
     if len(sys.argv)>=4:
         duration = np.float32(sys.argv[4])
@@ -106,6 +106,6 @@ if __name__:
     if len(sys.argv)>=5:
         torus_dim = np.int32(sys.argv[4])
     else:
-        torus_dim  = 1
+        torus_dim  = 3
 
     espaces(path_es,torus_j_max,torus_lengths,duration,torus_dim)
