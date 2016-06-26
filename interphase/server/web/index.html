@@ -8,16 +8,21 @@
         <link rel="stylesheet" type="text/css" media="all" href="css/base.css"></link>
         <link rel="stylesheet" type="text/css" media="all" href="css/style.css"></link>
 
+        <!-- OSC -->
         <script src="bower_components/osc.js/dist/osc-browser.min.js"></script>
         <script type="text/javascript">
+
             var port = new osc.WebSocketPort({
                 url: "ws://localhost:8080"
             });
+
             port.on("message", function (oscMessage) {
                 $("#message").text(JSON.stringify(oscMessage, undefined, 2));
                 console.log("message", oscMessage);
             });
+
             port.open();
+
             var sendMessage = function (parameter) {
                 port.send({
                     address: "/espaces",
@@ -26,20 +31,23 @@
             };
         </script>
 
+        <!--MathJax-->
         <script type="text/javascript" async
-            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+            src="bower_components/MathJax/MathJax.js?config=TeX-MML-AM_CHTML">
         </script>
-    </head>
 
+    </head>
 
     <body>
 
+        <!-- names top pannel -->
         <div id='names'>
             <div class='eq'> $$\text{ :: } P.Berger \text{ :: } S.Krakowski \text{ :: } J.Royo-Letelier \text{ :: }$$ </div>
         </div>
 
+        <!-- equation main content -->
         <div id='center'>
-            <div class='eq'> $$ sound \hspace{0.25cm} equation$$ </div>
+            <div class='eq_title'> $$ sound \hspace{0.25cm} equation$$ </div>
             <div class='eq'>
                 \begin{eqnarray}
                     \partial_t P - (c^2 + 2\nu\partial_t) \Delta P &=& Input  \\  \\
@@ -51,41 +59,124 @@
 
         </div>
 
+        <!-- geometry main content -->
         <div id='center'>
-            <div class='eq'> $$geometry$$ </div>
-            <img src="images/image_espace.png"/>
+            <div id="im_space" class='eq_title'> $$\small{\mathbb{S}^3} \hspace{0.5cm} geometry$$ </div>
+            <img id="space" src="images/h3.png"/>
         </div>
 
 
+        <!-- navigation bottom pannel -->
         <div id='navigation'>
 
             <div class="row">
 
                 <div class="col-2">
-                   <div class='eq'> $$\leftarrow \, previous$$</div>
+                   <div class='eq' id='sol'>
+                        $$\mathbb{SOL}$$
+                   </div>
                 </div>
 
                 <div class="col-2">
-                   <div class='eq'> $$\mathbb{T}^2$$</div>
+                   <div class='eq' id='h3'>
+                        $$\mathbb{H}^3$$
+                   </div>
                 </div>
 
                 <div class="col-2">
-                   <div class='eq'> $$\mathbb{T}^2 \times \mathbb{S}^2$$</div>
+                   <div class='eq' id='h2e1'>
+                        $$\mathbb{H}^2 \times \mathbb{N}^1$$
+                    </div>
                 </div>
 
                 <div class="col-2">
-                   <div class='eq'> $$\mathbb{S}^3$$</div>
+                   <div class='eq' id='s3'>
+                        $$\mathbb{S}^3$$
+                    </div>
                 </div>
 
                 <div class="col-2">
-                   <div class='eq'> $$\mathbb{NIL}$$</div>
+                   <div class='eq' id='nil'>
+                        $$\mathbb{NIL}$$
+                    </div>
                 </div>
 
                 <div class="col-2">
-                   <div class='eq'> $$\rightarrow \, next$$</div>
+                   <div class='eq' id='e3'>
+                        $$\mathbb{E}^3$$
+                    </div>
                 </div>
 
             </div>
+
+            <script>
+                // TODO : use later querySelectorAll
+                var x = document.getElementById("sol");
+                x.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/sol.png";
+                                        sendMessage('sol');
+                                        var math = MathJax.Hub.getAllJax("im_space")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\mathbb{SOL} \\hspace{0.5cm} geometry"]);
+                                     }
+            </script>
+
+            <script>
+                var y = document.getElementById("h3");
+                y.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/h3.png";
+                                        sendMessage('h3');
+                                        var math = MathJax.Hub.getAllJax("im_space")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\mathbb{H}^3 \\hspace{0.5cm} geometry"]);
+                                     }
+            </script>
+
+            <script>
+                var x = document.getElementById("h2e1");
+                x.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/h2e1.png";
+                                        sendMessage('h2e1');
+                                        var math = MathJax.Hub.getAllJax("im_space")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\mathbb{H}^2 \\times \\mathbb{E}^1 \\hspace{0.5cm} geometry"]);
+                                     }
+            </script>
+
+            <script>
+                var x = document.getElementById("s3");
+                x.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/s3.png";
+                                        sendMessage('s3');
+                                        var math = MathJax.Hub.getAllJax("im_space")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\mathbb{S}^3 \\hspace{0.5cm} geometry"]);
+                                     }
+            </script>
+
+
+            <script>
+                var x = document.getElementById("nil");
+                x.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/nil.png";
+                                        sendMessage('nil');
+                                        var math = MathJax.Hub.getAllJax("im_space")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\mathbb{NIL} \\hspace{0.5cm} geometry"]);
+                                     }
+            </script>
+
+            <script>
+                var x = document.getElementById("e3");
+                x.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/e3.png";
+                                        sendMessage('e3');
+                                        var math = MathJax.Hub.getAllJax("im_space")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\mathbb{E}^3 \\hspace{0.5cm} geometry"]);
+                                     }
+            </script>
+
 
         </div>
 

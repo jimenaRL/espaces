@@ -12,7 +12,7 @@
             float: left;
             border: 0.1px solid #AAB7B8;
             padding: 15px 0px 80px 0px;
-            min-height: 650px;
+            min-height: 750px;
           }
 
 #navigation {
@@ -23,13 +23,17 @@
               padding: 0px 0px 0px 0px;
 }
 
-
 #names div.eq {
     padding: 5px;
     font-size: 18px;
     float: right;
 }
 
+
+#center div.eq_title {
+    padding: 5px;
+    font-size: 52px;
+}
 
 #center div.eq {
     padding: 5px;
@@ -43,7 +47,8 @@
     width: auto;
     height: 25%;
     border: 0.1px solid #AAB7B8;
-    /*min-height: 125px;*/
+    cursor:pointer;
+    min-height: 150px;
 }
 
 #center img {
