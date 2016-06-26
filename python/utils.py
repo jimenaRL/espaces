@@ -49,18 +49,17 @@ def set_folders():
 
     return folders
 
-def set_paths(type,torus_j_max=None,L=None,duration=None):
+def set_paths(type,j_max=None,L=None,duration=None):
     """ """
 
     L = list2str(L)
-    torus_j_max = list2str(torus_j_max)
 
     if type=='green_fn':
-        name  = 'green_function_from_eigen_vals_j_max_%s_torus_length_%s_%1.1f_sec' % (torus_j_max,L,duration)
+        name  = 'green_function_from_eigen_vals_j_max_%s_torus_length_%s_%1.1f_sec' % (j_max,L,duration)
         im_folder = set_folders()['green_fn_im']
         au_folder = set_folders()['green_fn_au']
     elif type=='cv':
-        name = 'conv_j_max_%s_torus_length_%s_%1.1f_sec' % (torus_j_max,L,duration)
+        name = 'conv_j_max_%s_torus_length_%s_%1.1f_sec' % (j_max,L,duration)
         im_folder = set_folders()['cv_im']
         au_folder = set_folders()['cv_au']
     elif type=='es':

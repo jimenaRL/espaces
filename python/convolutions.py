@@ -21,10 +21,10 @@ def convolve_ola(signal, impulse_response):
     h = impulse_response.data
 
     M = h.shape[0];
-    N = np.ceil(x.shape[0]/float(M));
+    N = np.ceil(x.shape[0]/float(M)).astype('int64');
     Nfft = 2*M ;
 
-    output_data = np.zeros((max(Nfft*np.ceil(N/2.0),M+Nfft*(N/2.0)), signal.n_chan));
+    output_data = np.zeros((max(Nfft*np.ceil(N/2.0).astype('int64'),M+Nfft*(N/2.0).astype('int64')), signal.n_chan));
 
     for k in range(signal.n_chan):
         x_buff = np.zeros((M,N));
@@ -34,9 +34,10 @@ def convolve_ola(signal, impulse_response):
         if x.shape[0]%M == 0:
             x_buff[:,:] = x.reshape((M,N), order='F');
         else:
-            x[0:np.floor(x.shape[0]/float(M))*M].reshape((M,np.floor(x.shape[0]/float(M))));
-            x_buff[:,0:-1] = x[0:np.floor(x.shape[0]/float(M))*M].reshape((M,np.floor(x.shape[0]/float(M))), order='F');
-            x_buff[0:x.shape[0]-np.floor(x.shape[0]/float(M))*M,-1] = x[np.floor(x.shape[0]/float(M))*M:];
+            idx = np.floor(x.shape[0]/float(M)).astype('int64')
+            x[0:idx*M].reshape((M,idx));
+            x_buff[:,0:-1] = x[0:idx*M].reshape((M,idx), order='F');
+            x_buff[0:x.shape[0]-idx*M,-1] = x[idx*M:];
 
 
         x_buff_ft = fft(x_buff, n=Nfft, axis=0)
@@ -45,10 +46,11 @@ def convolve_ola(signal, impulse_response):
 
         cv_buff = np.real(ifft(h_ft.reshape((Nfft,1))*x_buff_ft, axis=0))
 
-        cv = np.zeros(max(Nfft*np.ceil(N/2.0),M+Nfft*(N/2)));
+        cv = np.zeros(max(Nfft*np.ceil(N/2.0),M+Nfft*(N/2)).astype('int64'));
 
-        cv[0:Nfft*np.ceil(N/2.0)] = cv_buff[:,0::2].reshape((Nfft*np.ceil(N/2.0)), order='F')
-        cv[M:M+Nfft*np.floor(N/2.0)] += cv_buff[:,1::2].reshape((Nfft*np.floor(N/2.0)), order='F')
+
+        cv[0:Nfft*np.ceil(N/2.0).astype('int64')] = cv_buff[:,0::2].reshape((Nfft*np.ceil(N/2.0)).astype('int64'), order='F')
+        cv[M:M+Nfft*np.floor(N/2.0).astype('int64')] += cv_buff[:,1::2].reshape((Nfft*np.floor(N/2.0)).astype('int64'), order='F')
         output_data[:,k] = cv;
 
     return signals.Signal(output_data, fs=signal.fs,normalize=True)

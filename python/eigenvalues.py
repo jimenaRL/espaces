@@ -9,62 +9,85 @@
 import numpy as np
 import itertools
 
-def one_torus(c,L,j_max):
-    """ Returns the eigen-values of a 1-torus in a list. 
-
-        c     : [float] sound velocity
-        L     : [float] length of the torus
-        j_max : [int] set index of eigen-values to compute as {-j_max,...,j_max}
+def _cartesian(arrays,  out=None):
     """
-    return [ np.square(2*np.pi*j/L) for j in range(-j_max,j_max+1) ]
+    Generate a cartesian product of input arrays.
+    Parameters
+    ----------
+    arrays : list of array-like
+        1-D arrays to form the cartesian product of.
+    out : ndarray
+        Array to place the cartesian product in.
+    Returns
+    -------
+    out : ndarray
+        2-D array of shape (M,  len(arrays)) containing cartesian products
+        formed of input arrays.
+    """
 
-def two_torus(c=340,L=[1,2],j_max=[1,1]):
+    arrays = [np.asarray(x) for x in arrays]
+    dtype = arrays[0].dtype
+
+    n = np.prod([x.size for x in arrays])
+    if out is None:
+        out = np.zeros([n,  len(arrays)],  dtype=dtype)
+
+    m = n / arrays[0].size
+    out[:, 0] = np.repeat(arrays[0],  m)
+    if arrays[1:]:
+        _cartesian(arrays[1:],  out=out[0:m, 1:])
+        for j in xrange(1,  arrays[0].size):
+            out[j*m:(j+1)*m, 1:] = out[0:m, 1:]
+    return out
+
+def n_torus(L=[1], j_max=1):
     """ Returns the eigen-values of the n-torus in a list. 
 
         c     : [float] sound velocity
-        L     : [float] list of 2-torus lengths (must be of size 2)
-        j_max : [list of int] set list of index of eigen-values to compute as {-j_k_max,...,j_k_max} in each direction
-        n     : torus dimension
-    """
-    if not len(L)==2:
-        raise ValueError("Size of L must be 2, found %i" % len(L))
-    else:
-        L = np.array(L,dtype='f8')
-    if not len(j_max)==2:
-        raise ValueError("Size of j_max must be 2, found %i" % len(j_max))
-    else:
-        j_max = np.array(j_max,dtype='i8')
-    temp = np.array([[ (j1/L[1]+j0/L[0]) for j1 in range(-j_max[1],j_max[1]+1) ] for j0 in range(-j_max[0],j_max[0]+1) ])
-    return np.square(2*np.pi*temp).flatten()
-           
-def n_torus(c=340,L=[1,2],j_max=1,n=2):
-    """ Returns the eigen-values of the n-torus in a list. 
-
-        c     : [float] sound velocity
-        L     : [float] list of n-torus lengths (must be of size n)
-        j_max : [int] set index of eigen-values to compute as {-j_max,...,j_max} in each direction
-        n     : torus dimension
+        L     : [float] list of n-torus lengths
+        j_max : [int] set index of eigen-values to compute as {-j_max, ..., j_max} in each direction
     """
 
-    if not (type(n)==int and n>0):
-        raise ValueError("n must be a positive integer, found %s" % str(n))
-    if not len(L)==n:
-        raise ValueError("Size of L must be %i, found %i" % (n,len(L)))
-    else:
-        L = np.array(L,dtype='f8')
-    if not len(j_max)==n:
-        raise ValueError("Size of j_max must be %i, found %i" % (n,len(j_max)))
-    else:
-        j_max = np.int64(j_max)
-    # if n==1:
-    #     return one_torus(c,L,j_max)
-    # elif n==2:
-    #     return two_torus(c,L,j_max)
-    # else:
-    if True:
-        k_list =  [ [np.square(2*np.pi*j/L[index]) for j in range(-j_max[index],j_max[index]+1)] for index in range(n) ]
-        cartesian_prod = itertools.product(*k_list)
-        return np.array([l for l in cartesian_prod]).flatten()
+    n = len(L)
+    k_list = [ [np.square(2*np.pi*j/L[index]) for j in range(0, j_max)] for index in range(n) ]
+    eigen_vals = _cartesian(k_list)
+    sym = True
 
-def get_eigenvalues(identifier, kwargs=None): 
-    """ TO DO """
+    return eigen_vals, sym
+
+def picard(c=340, L=[1], j_max=1):
+    """ from http://arxiv.org/pdf/math-ph/0305048v2.pdf """
+
+    l = [8.55525104,  6.62211934,
+    11.10856737, 10.18079978,
+    12.86991062, 12.11527484, 12.11527484,
+    14.07966049, 12.87936900,
+    15.34827764, 14.14833073,
+    15.89184204, 14.95244267, 14.95244267,
+    17.33640443, 16.20759420,
+    17.45131992, 17.45131992, 16.99496892, 16.99496892,
+    17.77664065, 17.86305643, 17.86305643,
+    19.06739052, 18.24391070,
+    19.22290266, 18.83298996,
+    19.41119126, 19.43054310, 19.43054310,
+    20.00754583, 20.30030720, 20.30030720,
+    20.70798880, 20.70798880, 20.60686743,
+    20.81526852, 21.37966055, 21.37966055,
+    21.42887079, 21.44245892,
+    22.12230276, 21.83248972, 21.83248972,
+    22.63055256, 22.58475297, 22.58475297,
+    22.96230105, 22.96230105, 22.85429195,
+    23.49617692, 23.49768305, 23.49768305,
+    23.52784503, 23.84275866,
+    23.88978413, 23.88978413, 23.89515755, 23.89515755,
+    24.34601664, 24.42133829, 24.42133829,
+    24.57501426, 25.03278076, 25.03278076,
+    24.70045917, 25.42905483,
+    25.47067539, 25.77588591, 25.77588591,
+    25.50724616, 26.03903968,
+    25.72392169, 25.72392]
+
+    eigen_vals =  np.array(l).reshape(len(l),1)
+    sym = False
+
+    return eigen_vals, sym
