@@ -11,6 +11,9 @@
 import os
 import sys
 import time
+import itertools
+
+from joblib import Parallel, delayed
 
 import numpy as np
 
@@ -38,9 +41,10 @@ def espaces(path_es,j_max=100,L=[1],duration=1):
     start_t = time.time()
     eigen_params = { 'kind' :'n_torus', 'params' : {} }
 
-    # eigen_vals,sym =  n_torus(L,j_max)
-    eigen_vals,sym =  picard()
+    eigen_vals,sym =  n_torus(L,j_max)
+    # eigen_vals,sym =  picard()
 
+    print '\n'+str(L)
     print "eigen-values  took %1.2f seconds" % ((time.time()-start_t))
 
     # compute and save green function
@@ -49,8 +53,8 @@ def espaces(path_es,j_max=100,L=[1],duration=1):
     print "green_fn_0  took %1.3f seconds" % ((time.time() -start_t))
     sig_gf = Signal(green_fn_0,fs=sampling_rate,mono=True,normalize=True)
 
-    import matplotlib.pyplot as plt
-    plt.plot(sig_gf.data,'-'); plt.show()
+    # import matplotlib.pyplot as plt
+    # plt.plot(sig_gf.data,'-'); plt.show()
 
     # convolve emitted sound with the green function and save it
     start_t = time.time()
@@ -76,18 +80,25 @@ def espaces(path_es,j_max=100,L=[1],duration=1):
     sig_cv.save_image(cv_im_path, title='reverberated sound')
 
     # look at results
-    open_osx(cv_im_path,gf_im_path)
-    sig_gf.play()
-    sig_cv.play()
-    os.system("osascript -e 'quit app \"Preview\"'")
+    # open_osx(cv_im_path,gf_im_path)
+    # sig_gf.play()
+    # sig_cv.play()
+    # os.system("osascript -e 'quit app \"Preview\"'")
 
 if __name__:
 
     path_es = os.path.join(ESPACES_PROJECT,'data','examples','speech_small.wav')
 
-    j_max = 20
-    L = [40,20,30]
+    j_max = 50
     duration  = 1.0
 
-    espaces(path_es,j_max,L,duration)
+    l1 = np.linspace(10,50,10)
+    l2 = np.linspace(10,50,10)
+    l3 = np.linspace(10,50,10)
 
+
+    for L in itertools.product(l1,l2,l3):
+        espaces(path_es,j_max,L,duration)
+
+    # parallel = Parallel(n_jobs=4)
+    # parallel(delayed(espaces)(path_es,j_max,L,duration) for L in itertools.product(l1,l2,l3))

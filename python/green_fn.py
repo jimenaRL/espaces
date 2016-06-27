@@ -35,7 +35,7 @@ def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,sym=False):
 
         ev_j = np.prod(eigen_vals[0].flatten())
         green_fn_0 += np.exp( (-1) * ev_j * nu * t_discret ) * np.cos( np.sqrt(ev_j) * c *  np.sqrt(1-(ev_j*nu*nu/(c*c))) * t_discret)
-        for ev_j in tqdm(eigen_vals[1:]):
+        for ev_j in  tqdm(eigen_vals[1:]): #eigen_vals[1:]: 
             ev_j = np.prod(ev_j.flatten())
             green_fn_0 += 2*np.exp( (-1) * ev_j * nu * t_discret ) * np.cos( np.sqrt(ev_j) * c *  np.sqrt(1-(ev_j*nu*nu/(c*c))) * t_discret)  
 
