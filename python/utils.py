@@ -10,10 +10,43 @@ import os
 import sys
 from datetime import date
 
+import numpy as np
 # add to python path
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 
+def cartesian(arrays,  out=None):
+    """
+    Generate a cartesian product of input arrays.
+    Parameters
+    ----------
+    arrays : list of array-like
+        1-D arrays to form the cartesian product of.
+    out : ndarray
+        Array to place the cartesian product in.
+    Returns
+    -------
+    out : ndarray
+        2-D array of shape (M,  len(arrays)) containing cartesian products
+        formed of input arrays.
+    """
+
+    arrays = [np.asarray(x) for x in arrays]
+    dtype = arrays[0].dtype
+
+    n = np.prod([x.size for x in arrays])
+    if out is None:
+        out = np.zeros([n,  len(arrays)],  dtype=dtype)
+
+    m = n / arrays[0].size
+    out[:, 0] = np.repeat(arrays[0],  m)
+    if arrays[1:]:
+        cartesian(arrays[1:],  out=out[0:m, 1:])
+        for j in xrange(1,  arrays[0].size):
+            out[j*m:(j+1)*m, 1:] = out[0:m, 1:]
+    return out
+
 def list2str(lst):
+    lst = [lst] if type(lst)==int else lst
     lst_str = ''
     for l in range(len(lst)-2): lst_str += (str(lst[l])+'_')
     lst_str += str(lst[len(lst)-1])
@@ -43,23 +76,30 @@ def set_folders():
     folders['es_im'] = os.path.join(results_path,'emitted_sound','images')
     folders['es_au'] = os.path.join(results_path,'emitted_sound','audio')
 
+    folders['ev_im'] = os.path.join(results_path,'eigenvalues','images')
+    folders['ev_au'] = os.path.join(results_path,'eigenvalues','audio')
+
     for key in folders:
         if not os.path.exists(folders[key]):
             os.makedirs(folders[key])
 
     return folders
 
-def set_paths(type,j_max=None,L=None,duration=None):
+def set_paths(type,kind,j_max=None,F=None,duration=None):
     """ """
 
-    L = list2str(L)
+    F = list2str(F)
 
+    if type=='ev':
+        name  = 'eigen_vals_%s_j_max_%s_freq_prop_%s_%1.1f_sec' % (kind,j_max,F,duration)
+        im_folder = set_folders()['ev_im']
+        au_folder = set_folders()['ev_au']
     if type=='green_fn':
-        name  = 'green_function_from_eigen_vals_j_max_%s_torus_length_%s_%1.1f_sec' % (j_max,L,duration)
+        name  = 'green_function_from_eigen_vals_%s_j_max_%s_freq_prop_%s_%1.1f_sec' % (kind,j_max,F,duration)
         im_folder = set_folders()['green_fn_im']
         au_folder = set_folders()['green_fn_au']
     elif type=='cv':
-        name = 'conv_j_max_%s_torus_length_%s_%1.1f_sec' % (j_max,L,duration)
+        name = 'conv_%s_j_max_%s_freq_prop_%s_%1.1f_sec' % (kind,j_max,F,duration)
         im_folder = set_folders()['cv_im']
         au_folder = set_folders()['cv_au']
     elif type=='es':

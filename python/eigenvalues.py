@@ -9,53 +9,41 @@
 import numpy as np
 import itertools
 
-def _cartesian(arrays,  out=None):
-    """
-    Generate a cartesian product of input arrays.
-    Parameters
-    ----------
-    arrays : list of array-like
-        1-D arrays to form the cartesian product of.
-    out : ndarray
-        Array to place the cartesian product in.
-    Returns
-    -------
-    out : ndarray
-        2-D array of shape (M,  len(arrays)) containing cartesian products
-        formed of input arrays.
-    """
+from utils import cartesian
 
-    arrays = [np.asarray(x) for x in arrays]
-    dtype = arrays[0].dtype
 
-    n = np.prod([x.size for x in arrays])
-    if out is None:
-        out = np.zeros([n,  len(arrays)],  dtype=dtype)
-
-    m = n / arrays[0].size
-    out[:, 0] = np.repeat(arrays[0],  m)
-    if arrays[1:]:
-        _cartesian(arrays[1:],  out=out[0:m, 1:])
-        for j in xrange(1,  arrays[0].size):
-            out[j*m:(j+1)*m, 1:] = out[0:m, 1:]
-    return out
-
-def n_torus(L=[1], j_max=1):
-    """ Returns the eigen-values of the n-torus in a list. 
-
-        c     : [float] sound velocity
-        L     : [float] list of n-torus lengths
+def n_torus(F=[440], c=3.4e2, j_max=1):
+    """ Returns a list containing eigen-values of the Laplacien in the N-TORUS manifold. 
+        F     : [c/l1, c/l2, ...] where l1, l2, ... are the n-torus lengths
         j_max : [int] set index of eigen-values to compute as {-j_max, ..., j_max} in each direction
     """
 
-    n = len(L)
-    k_list = [ [np.square(2*np.pi*j/L[index]) for j in range(0, j_max)] for index in range(n) ]
-    eigen_vals = _cartesian(k_list)
-    sym = True
+    n = len(F)
+    k_list = [ [np.square(2*np.pi*j*F[index]/c) for j in range(1, j_max+1)] for index in range(n) ]
+    cartesian_prod = cartesian(k_list)
+    values = [np.sum(cartesian_prod[k]) for k in range(len(cartesian_prod))]
 
-    return eigen_vals, sym
+    eigen_vals = [ {'value' : values[k], 'multiplicity' : 2**(n-1) }
+                  for k in range(len(values))
+                  ]
 
-def picard(c=340, L=[1], j_max=1):
+    return eigen_vals
+
+def sphere_3(F=440, c=3.4e2,j_max=1):
+    """ Returns a list containing eigen-values of the Laplacien in the 3_sphere manifold. 
+        c     : [float] sound velocity
+        F     : c/l where l is the 3-sphere radious
+        j_max : [int] number de eigenvalue
+    """
+    eigen_vals =  [{'value'        : 2*np.pi*(k)*(k+2)*F/c,
+                    'multiplicity' : int((k+1)*(k+2)*(k+3)/6)
+                    }
+                    for k in range(1,j_max+1)
+                 ]
+
+    return eigen_vals
+
+def picard(c=3.4e2, L=[1], j_max=1):
     """ from http://arxiv.org/pdf/math-ph/0305048v2.pdf """
 
     l = [8.55525104,  6.62211934,
