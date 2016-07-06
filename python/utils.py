@@ -85,21 +85,21 @@ def set_folders():
 
     return folders
 
-def set_paths(type,kind,j_max=None,F=None,duration=None):
+def set_paths(type,kind,j_max=None,F=None,duration=None,c=0,nu=0):
     """ """
 
     F = list2str(F)
 
     if type=='ev':
-        name  = 'eigen_vals_%s_j_max_%s_freq_prop_%s_%1.1f_sec' % (kind,j_max,F,duration)
+        name  = 'eigen_vals_%s_j_max_%s_freq_prop_%s_c_%f_nu_%f_sec_%1.1f' % (kind,j_max,F,duration,c,nu)
         im_folder = set_folders()['ev_im']
         au_folder = set_folders()['ev_au']
     if type=='green_fn':
-        name  = 'green_function_from_eigen_vals_%s_j_max_%s_freq_prop_%s_%1.1f_sec' % (kind,j_max,F,duration)
+        name  = 'green_fn_%s_j_max_%s_freq_prop_%s_c_%f_nu_%f_sec_%1.1f' % (kind,j_max,F,duration,c,nu)
         im_folder = set_folders()['green_fn_im']
         au_folder = set_folders()['green_fn_au']
     elif type=='cv':
-        name = 'conv_%s_j_max_%s_freq_prop_%s_%1.1f_sec' % (kind,j_max,F,duration)
+        name = 'conv_%s_j_max_%s_freq_prop_%s_c_%f_nu_%f_sec_%1.1f' % (kind,j_max,F,duration,c,nu)
         im_folder = set_folders()['cv_im']
         au_folder = set_folders()['cv_au']
     elif type=='es':
