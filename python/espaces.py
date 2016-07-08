@@ -23,7 +23,7 @@ from utils import set_paths, open_osx
 from signals import Signal
 
 from eigenvalues import n_torus, picard, sphere_3
-from green_fn import compute_green_fn
+from green_fn import compute_green_fn, compute_green_fn_theano
 from convolutions import convolve_signals
 
 # add to python path
@@ -48,8 +48,14 @@ def espaces(path_es='',F=[440],j_max=100,duration=1,kind='n_torus',c=3.4e2,nu=1.
     # compute and save green function
     start_t = time.time()
     green_fn_0 = compute_green_fn(c, nu, eigen_vals, duration, sampling_rate)
-    print "green_fn_0  took %1.3f seconds" % ((time.time() -start_t))
+    print "NUMPY green_fn_0 took %1.3f seconds" % ((time.time() -start_t))
     sig_gf = Signal(green_fn_0,fs=sampling_rate,mono=True,normalize=True)
+
+
+    # compute and save green function
+    start_t = time.time()
+    theano_green_fn_0 = compute_green_fn_theano(c, nu, eigen_vals, duration, sampling_rate)
+    print "THEANO green_fn_0  took %1.3f seconds" % ((time.time() -start_t))
 
     # convolve emitted sound with the green function and save it
     start_t = time.time()
@@ -98,18 +104,23 @@ if __name__:
 
 
     # n-torus
-    j_max = 50
+    j_max = 15
     duration  = 1.0
 
     kind = 'n_torus'
 
-    f1 = np.linspace(0.1,5.,50)
-    f2 = np.linspace(5.,10.,50)
-    f3 = np.linspace(15.,100.,50)
+    F = [1.,5.,15.]
+    espaces(path_es,F,j_max,duration,kind,c,nu)
 
-    for F in itertools.product(f1,f2,f3):
-        print '%s %s' % (kind,str(F))
-        espaces(path_es,F,j_max,duration,kind,c,nu)
+
+    # f1 = np.linspace(0.1,5.,50)
+    # f2 = np.linspace(5.,10.,50)
+    # f3 = np.linspace(15.,100.,50)
+
+
+    # for F in itertools.product(f1,f2,f3):
+    #     print '%s %s' % (kind,str(F))
+    #     espaces(path_es,F,j_max,duration,kind,c,nu)
 
     # sphere_3
     # j_max = 1000

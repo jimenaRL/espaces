@@ -12,29 +12,28 @@ import numpy as np
 import theano 
 import theano.tensor as T
 
-# def fn(c,nu,ev_j,X):
 
-#     return T.exp( (-1) * ev_j * nu * X ) * T.cos( T.sqrt(ev_j) * c *  T.sqrt(1-(ev_j*nu*nu/(c*c))) * X)
+def compute_green_fn_theano(c,nu,eigen_vals,duration,sampling_rate):
 
+    c  = np.float64(c)
+    nu = np.float64(nu)
 
-# def compute_green_fn_theano(c,nu,eigen_vals,duration,sampling_rate):
+    time_step  = 1/np.float64(sampling_rate)
+    dur_points = np.int(duration/time_step)
+    t_discret  = np.linspace(0,duration,dur_points).reshape((1,dur_points))
+    X = T.constant(t_discret)
 
-#     c  = np.float64(c)
-#     nu = np.float64(nu)
+    values = np.array([e['value'] for e in  eigen_vals]).astype('float32').reshape(len(eigen_vals),1)
 
-#     time_step  = 1/np.float64(sampling_rate)
-#     dur_points = np.int(duration/time_step)
+    multiplicities = np.array([e['multiplicity'] for e in  eigen_vals]).astype('float32').reshape(len(eigen_vals),1)
+    V = T.constant(values)
 
-#     X = T.constant(np.linspace(0,duration,dur_points)) # t_discret
+    EXP = T.sqrt(V*c*c-V*V*nu*nu)
+    EXP_X = EXP*X
 
-#     components, updates = theano.scan( fn=fn,
-#                                         outputs_info=None,
-#                                         sequences=[eigen_vals],
-#                                         non_sequences=[c,nu,X])
-#     green_fn = components.sum()
+    theano_green_fn_0 = ( multiplicities * (T.exp( (-1) * nu * V*X ) * T.cos( T.sqrt(V) * c * T.sqrt(1-(V*nu*nu/c*c) ) * X ) ) ).sum(axis=0)
 
-#     return theano.function(inputs=[eigen_vals], outputs=green_fn)
-
+    return theano_green_fn_0.eval()
 
 
 def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,sym=False):
@@ -62,6 +61,6 @@ def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,sym=False):
     for ev_j in  tqdm(eigen_vals):
         value = ev_j['value']
         multiplicity = ev_j['multiplicity']
-        green_fn_0 += multiplicity*np.exp( (-1) * value * nu * t_discret ) * np.cos( np.sqrt(value) * c *  np.sqrt(1-(value*nu*nu/(c*c))) * t_discret)  
+        green_fn_0 += multiplicity * np.exp( (-1) * nu * value * t_discret ) * np.cos( np.sqrt(value) * c *  np.sqrt(1-(value*nu*nu/(c*c))) * t_discret)  
 
     return green_fn_0
