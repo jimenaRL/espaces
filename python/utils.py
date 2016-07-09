@@ -11,7 +11,7 @@ import sys
 from datetime import date
 
 import numpy as np
-# add to python path
+
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 
 def cartesian(arrays,  out=None):
@@ -60,24 +60,25 @@ def open_osx(*args):
     else:
         raise StandardError("open_osx only implemente for mac osx")
 
-def set_folders():
+def set_folders(kind):
     """ """
 
     results_path = os.path.join(ESPACES_PROJECT,'data','results',date.today().isoformat())
 
     folders = {}
 
-    folders['green_fn_im'] = os.path.join(results_path,'green_fn','images')
-    folders['green_fn_au'] = os.path.join(results_path,'green_fn','audio')
+    folders['green_fn_im'] = os.path.join(results_path,'green_fn',kind,'images')
+    folders['green_fn_au'] = os.path.join(results_path,'green_fn',kind,'audio')
 
-    folders['cv_im'] = os.path.join(results_path,'conv_result','images')
-    folders['cv_au'] = os.path.join(results_path,'conv_result','audio')
+    folders['cv_im'] = os.path.join(results_path,'conv_result',kind,'images')
+    folders['cv_au'] = os.path.join(results_path,'conv_result',kind,'audio')
+
+    folders['ev_im'] = os.path.join(results_path,'eigenvalues',kind)
+    folders['ev_au'] = os.path.join(results_path,'eigenvalues',kind)
 
     folders['es_im'] = os.path.join(results_path,'emitted_sound','images')
     folders['es_au'] = os.path.join(results_path,'emitted_sound','audio')
 
-    folders['ev_im'] = os.path.join(results_path,'eigenvalues','images')
-    folders['ev_au'] = os.path.join(results_path,'eigenvalues','audio')
 
     for key in folders:
         if not os.path.exists(folders[key]):
@@ -92,18 +93,18 @@ def set_paths(type,kind,j_max=None,F=None,duration=None,c=0,nu=0):
 
     if type=='ev':
         name  = 'eigen_vals_%s_j_max_%s_freq_prop_%s_c_%f_nu_%f_sec_%1.1f' % (kind,j_max,F,duration,c,nu)
-        im_folder = set_folders()['ev_im']
-        au_folder = set_folders()['ev_au']
+        im_folder = set_folders(kind)['ev_im']
+        au_folder = set_folders(kind)['ev_au']
     if type=='green_fn':
         name  = 'green_fn_%s_j_max_%s_freq_prop_%s_c_%f_nu_%f_sec_%1.1f' % (kind,j_max,F,duration,c,nu)
-        im_folder = set_folders()['green_fn_im']
-        au_folder = set_folders()['green_fn_au']
+        im_folder = set_folders(kind)['green_fn_im']
+        au_folder = set_folders(kind)['green_fn_au']
     elif type=='cv':
         name = 'conv_%s_j_max_%s_freq_prop_%s_c_%f_nu_%f_sec_%1.1f' % (kind,j_max,F,duration,c,nu)
-        im_folder = set_folders()['cv_im']
-        au_folder = set_folders()['cv_au']
+        im_folder = set_folders(kind)['cv_im']
+        au_folder = set_folders(kind)['cv_au']
     elif type=='es':
         name = 'emitted_sound'
-        im_folder = set_folders()['es_im']
-        au_folder = set_folders()['es_au']
+        im_folder = set_folders(kind)['es_im']
+        au_folder = set_folders(kind)['es_au']
     return os.path.join(im_folder,name+'.png'), os.path.join(au_folder,name+'.wav')

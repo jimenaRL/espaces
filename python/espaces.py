@@ -53,9 +53,9 @@ def espaces(path_es='',F=[440],j_max=100,duration=1,kind='n_torus',c=3.4e2,nu=1.
 
 
     # compute and save green function
-    start_t = time.time()
-    theano_green_fn_0 = compute_green_fn_theano(c, nu, eigen_vals, duration, sampling_rate)
-    print "THEANO green_fn_0  took %1.3f seconds" % ((time.time() -start_t))
+    # start_t = time.time()
+    # theano_green_fn_0 = compute_green_fn_theano(c, nu, eigen_vals, duration, sampling_rate)
+    # print "THEANO green_fn_0  took %1.3f seconds" % ((time.time() -start_t))
 
     # convolve emitted sound with the green function and save it
     start_t = time.time()
