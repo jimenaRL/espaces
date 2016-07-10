@@ -6,14 +6,84 @@
 #                                                                            */
 # -------------------------------------------------------------------------- */
 
+import os
+
 import numpy as np
 import itertools
 
-from utils import cartesian
+from utils import cartesian, ESPACES_PROJECT
 
 
-def n_torus(F=[440], c=3.4e2, j_max=1):
-    """ Returns a list containing eigen-values of the Laplacien in the N-TORUS manifold. 
+def espace_product(eA_eigen_vals,eB_eigen_vals):
+    """ Returns a list containing eigen-values and their multiciplies of the Laplacien in the E_A X E_B manifold. """
+
+
+    eA_ev_factor = [ v['value'] for v in eA_eigen_vals]
+    eB_ev_factor = [ v['value'] for v in eB_eigen_vals]
+
+    eA_m_factor = [ v['multiplicity'] for v in eA_eigen_vals]
+    eB_m_factor = [ v['multiplicity'] for v in eB_eigen_vals]
+
+    ev_cartesian_prod = cartesian([eA_ev_factor,eB_ev_factor])
+    m_cartesian_prod = cartesian([eA_m_factor,eA_m_factor])
+
+    values         = [np.sum(ev_cartesian_prod[k]) for k in range(len(ev_cartesian_prod))]
+    multiplicities = [np.prod(m_cartesian_prod[k]) for k in range(len(m_cartesian_prod))]
+
+
+    eigen_vals = [ {'value' : values[k], 
+                    'multiplicity' : multiplicities[k] }
+                     for k in range(len(values))
+                  ]
+
+    return eigen_vals
+
+
+
+def s2e1(F=[0.1,0.1], c=3.4e2, j_max=1):
+    """ Returns a list containing eigen-values of the Laplacien in the S^2 X E^1 manifold. 
+        F     : [c/r, c/l] where where r is the 2-sphere radious and l the length of the 1-torus
+        j_max : [int] set index of eigen-values to compute as {-j_max, ..., j_max} in each direction
+    """
+
+    assert(len(F)==2)
+    s2_eigen_vals = sphere_2(F=F[0], c=c,j_max=int(np.sqrt(j_max)))
+    e1_eigen_vals = n_torus(F=[F[1]], c=c, j_max=int(np.sqrt(j_max)))
+
+
+    return espace_product(s2_eigen_vals,e1_eigen_vals)
+
+
+def h2e1(F=[0.1], c=3.4e2, j_max=1):
+    """ Returns a list containing eigen-values of the Laplacien in the H^2 X E^1 manifold. 
+        F     : [c/l] where where l is the length of the 1-torus
+        j_max : [int] set index of eigen-values to compute as {-j_max, ..., j_max} in each direction
+    """
+
+    assert(len(F)==1)
+    h2_eigen_vals = hyperbolic(j_max=int(np.sqrt(j_max)))
+    e1_eigen_vals = n_torus(F=F, c=c, j_max=int(np.sqrt(j_max)))
+
+    return espace_product(h2_eigen_vals,e1_eigen_vals)
+
+
+def hyperbolic(j_max=1):
+    """ from http://homepages.lboro.ac.uk/~maas3/publications/eigdata/datafile.html """
+
+    with open(os.path.join(ESPACES_PROJECT,'dev','eigenvalues','eig-pol-1-0-500.dat'),'r') as f: 
+        l = [float(i[:-1]) for i in f.readlines()]
+
+    eigen_vals =  [{'value'        : l[k],
+                    'multiplicity' : 1
+                    }
+                    for k in range(0,j_max)
+                 ]
+
+    return eigen_vals
+
+
+def n_torus(F=[0.1], c=3.4e2, j_max=1):
+    """ Returns a list containing eigen-values of the Laplacien in the n-torus manifold. 
         F     : [c/l1, c/l2, ...] where l1, l2, ... are the n-torus lengths
         j_max : [int] set index of eigen-values to compute as {-j_max, ..., j_max} in each direction
     """
@@ -29,10 +99,10 @@ def n_torus(F=[440], c=3.4e2, j_max=1):
 
     return eigen_vals
 
-def sphere_3(F=440, c=3.4e2,j_max=1):
-    """ Returns a list containing eigen-values of the Laplacien in the 3_sphere manifold. 
+def sphere_3(F=0.1, c=3.4e2,j_max=1):
+    """ Returns a list containing eigen-values of the Laplacien in the 3-sphere manifold. 
         c     : [float] sound velocity
-        F     : c/l where l is the 3-sphere radious
+        F     : c/r where r is the 3-sphere radious
         j_max : [int] number de eigenvalue
     """
     eigen_vals =  [{'value'        : 2*np.pi*(k)*(k+2)*F/c,
@@ -43,39 +113,16 @@ def sphere_3(F=440, c=3.4e2,j_max=1):
 
     return eigen_vals
 
-def picard(c=3.4e2, L=[1], j_max=1):
-    """ from http://arxiv.org/pdf/math-ph/0305048v2.pdf """
+def sphere_2(F=0.1, c=3.4e2,j_max=1):
+    """ Returns a list containing eigen-values of the Laplacien in the 2-sphere manifold. 
+        c     : [float] sound velocity
+        F     : c/l where l is the 3-sphere radious
+        j_max : [int] number de eigenvalue
+    """
+    eigen_vals =  [{'value'        : 2*np.pi*(k)*(k+1)*F/c,
+                    'multiplicity' : int((k+1)*(k+2)/2)
+                    }
+                    for k in range(1,j_max+1)
+                 ]
 
-    l = [8.55525104,  6.62211934,
-    11.10856737, 10.18079978,
-    12.86991062, 12.11527484, 12.11527484,
-    14.07966049, 12.87936900,
-    15.34827764, 14.14833073,
-    15.89184204, 14.95244267, 14.95244267,
-    17.33640443, 16.20759420,
-    17.45131992, 17.45131992, 16.99496892, 16.99496892,
-    17.77664065, 17.86305643, 17.86305643,
-    19.06739052, 18.24391070,
-    19.22290266, 18.83298996,
-    19.41119126, 19.43054310, 19.43054310,
-    20.00754583, 20.30030720, 20.30030720,
-    20.70798880, 20.70798880, 20.60686743,
-    20.81526852, 21.37966055, 21.37966055,
-    21.42887079, 21.44245892,
-    22.12230276, 21.83248972, 21.83248972,
-    22.63055256, 22.58475297, 22.58475297,
-    22.96230105, 22.96230105, 22.85429195,
-    23.49617692, 23.49768305, 23.49768305,
-    23.52784503, 23.84275866,
-    23.88978413, 23.88978413, 23.89515755, 23.89515755,
-    24.34601664, 24.42133829, 24.42133829,
-    24.57501426, 25.03278076, 25.03278076,
-    24.70045917, 25.42905483,
-    25.47067539, 25.77588591, 25.77588591,
-    25.50724616, 26.03903968,
-    25.72392169, 25.72392]
-
-    eigen_vals =  np.array(l).reshape(len(l),1)
-    sym = False
-
-    return eigen_vals, sym
+    return eigen_vals

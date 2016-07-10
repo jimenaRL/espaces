@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 from utils import set_paths, open_osx
 from signals import Signal
 
-from eigenvalues import n_torus, picard, sphere_3
+from eigenvalues import *
 from green_fn import compute_green_fn, compute_green_fn_theano
 from convolutions import convolve_signals
 
@@ -43,8 +43,15 @@ def espaces(path_es=PATH_ES,F=[440],j_max=100,duration=1,kind='n_torus',c=3.4e2,
     if kind=='n_torus':
         eigen_vals =  n_torus(F,c,j_max)
 
-    if kind=='sphere_3':
+    elif kind=='sphere_3':
         eigen_vals =  sphere_3(F,c,j_max)
+
+    elif kind=='s2e1':
+        eigen_vals =  s2e1(F,c,j_max)
+
+    elif kind=='h2e1':
+        eigen_vals =  h2e1(F,c,j_max)
+
 
     print "eigen-values  took %1.2f seconds" % ((time.time()-start_t))
 
@@ -124,14 +131,45 @@ def compute_sphere_3(c,nu):
         print '%s %s' % (kind,str(F))
         espaces(PATH_ES,F,j_max,duration,kind,c,nu)
 
+def compute_h2e1(c,nu):
+
+    # h2e1
+    j_max = 100
+    duration = 5.0
+
+    f1 = np.linspace(0.01,5,100)
+    kind = 'h2e1'
+    for F in f1:
+        print '%s %s' % (kind,str(F))
+        espaces(PATH_ES,[F],j_max,duration,kind,c,nu)
+
+
+
+def compute_s2e1(c,nu):
+
+    # s2e1
+    j_max = 100
+    duration = 5.0
+
+    kind = 's2e1'
+
+    f1 = np.linspace(0.1,5.,10)
+    f2 = np.linspace(5.,10.,10)
+
+    for F in itertools.product(f1,f2):
+        print 'kind %s \t F %s' % (kind,str(F))
+        espaces(PATH_ES,F,j_max,duration,kind,c,nu)
+
+
 
 if __name__:
 
     c = 3.4e2
     nu = 1.7e-5
 
-    compute_sphere_3(c,nu)
-    compute_torus_3(c,nu)
-
+    # compute_sphere_3(c,nu)
+    # compute_torus_3(c,nu)
+    # compute_s2e1(c,nu)
+    compute_h2e1(c,nu)
 
 
