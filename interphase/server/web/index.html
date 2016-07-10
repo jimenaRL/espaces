@@ -42,18 +42,18 @@
 
         <!-- names top pannel -->
         <div id='names'>
-            <div class='eq'> $$ \large{\color{white}{\text{ :: } P.Berger \text{ :: } S.Krakowski \text{ :: } J.Royo-Letelier \text{ :: }}}$$ </div>
+            <div class='eq' style="font-size: 100%" > $$ \color{white}{\text{ :: } P.Berger \text{ :: } S.Krakowski \text{ :: } J.Royo-Letelier \text{ :: }}$$ </div>
         </div>
+
+
+        <div id='center_top'>
+            <div class='eq' id="title" style="font-size: 200%"> $$ \color{white}{Sound \hspace{0.5cm} Equation \hspace{12.5cm} Geometry  \hspace{0.5cm} \mathbb{E}^3  \hspace{1cm}  } $$ </div>
+        </div>
+
 
         <!-- equation main content -->
         <div id='center'>
-            <div class='eq_title'> $$ \large{\color{white}{Sound \hspace{0.25cm} Equation} }$$ </div>
-                            </br>
-                </br></br></br></br></br></br></br>
-            <div class='eq'>
-                </br>
-                </br>
-
+            <div class='eq' style="font-size: 120%">
                 \begin{equation}
                     \Large{\color{white}{\partial_t P - (c^2 + 2\nu\partial_t) \Delta P } \color{white}{=} \color{white}{Input}} \\ 
                 \end{equation}
@@ -72,9 +72,9 @@
 
         <!-- geometry main content -->
         <div id='center'>
-            <div id="im_space" class='eq_title'> $$\color{white}{ \large{ Geometry}\hspace{0.5cm} \Large{\mathbb{H}^3}}$$ </div>
-            <img id="space" src="images/h3.png"/>
+            <img id="space" src="images/e3.png"/>
         </div>
+
 
 
         <!-- navigation bottom pannel -->
@@ -82,66 +82,51 @@
 
             <div class="row">
 
-                <div class="col-2">
-                   <div class='eq' id='sol'>
+                <div class="col-3">
+                   <div class='eq' id='e3' style="font-size: 200%">
+                        $$\color{white}{\mathbb{E}^3}$$
+                    </div>
+                </div>
+                 <div class="col-3">
+                   <div class='eq' id='s2e1' style="font-size: 200%">
+                        $$\color{white}{\mathbb{S}\times \mathbb E^1}$$
+                   </div>
+                </div>
+                <div class="col-3">
+                   <div class='eq' id='h2e1' style="font-size: 200%">
+                        $$\color{white}{\mathbb{H}^2 \times \mathbb{E}^1}$$
+                    </div>
+                </div>
+                <div class="col-3">
+                   <div class='eq' id='s3' style="font-size: 200%">
+                        $$\color{white}{\mathbb{S}^3}$$
+                    </div>
+                </div>
+
+<!--
+                <div class="col-3">
+                   <div class='eq' id='sol' style="font-size: 200%">
                         $$\large\color{white}{\mathbb{SOL}}$$
                    </div>
                 </div>
-
-                <div class="col-2">
-                   <div class='eq' id='s2e1'>
-                        $$\large\color{white}{\mathbb{S}\times \mathbb E^1}$$
+                <div class="col-3">
+                   <div class='eq' id='sl2' style="font-size: 200%">
+                        $$\color{white}{\mathbb{SL}_2}$$
                    </div>
                 </div>
-                <div class="col-2">
-                   <div class='eq' id='sl2'>
-                        $$\large\color{white}{\mathbb{SL}_2}$$
+                 <div class="col-3">
+                   <div class='eq' id='h3' style="font-size: 200%">
+                        $$\color{white}{\mathbb{H}^3}$$
                    </div>
                 </div>
-
-
-                <div class="col-2">
-                   <div class='eq' id='h3'>
-                        $$\large\color{white}{\mathbb{H}^3}$$
-                   </div>
-                </div>
-
-                <div class="col-2">
-                   <div class='eq' id='h2e1'>
-                        $$\large\color{white}{\mathbb{H}^2 \times \mathbb{E}^1}$$
+                <div class="col-3">
+                   <div class='eq' id='nil' style="font-size: 200%">
+                        $$\color{white}{\mathbb{NIL}}$$
                     </div>
                 </div>
-
-                <div class="col-2">
-                   <div class='eq' id='s3'>
-                        $$\large\color{white}{\mathbb{S}^3}$$
-                    </div>
-                </div>
-
-                <div class="col-2">
-                   <div class='eq' id='nil'>
-                        $$\large\color{white}{\mathbb{NIL}}$$
-                    </div>
-                </div>
-
-                <div class="col-2">
-                   <div class='eq' id='e3'>
-                        $$\large\color{white}{\mathbb{E}^3}$$
-                    </div>
-                </div>
+ -->
 
             </div>
-
-            <script>
-                var x = document.getElementById("sol");
-                x.addEventListener("click", myFunction);
-                function myFunction() {
-                                        document.getElementById("space").src = "images/sol.png";
-                                        sendMessage('sol');
-                                        var math = MathJax.Hub.getAllJax("im_space")[0];
-                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{ Geometry \\hspace{1cm} \\mathbb{SOL} }"]);
-                                     }
-            </script>
 
              <script>
                 var x = document.getElementById("s2e1");
@@ -149,20 +134,8 @@
                 function myFunction() {
                                         document.getElementById("space").src = "images/s2e1.png";
                                         sendMessage('s2e1');
-                                        var math = MathJax.Hub.getAllJax("im_space")[0];
-                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{ Geometry \\hspace{1cm} \\mathbb{S}^2\\times \\mathbb E^1 }"]);
-                                     }
-            </script>
-
-
-            <script>
-                var y = document.getElementById("h3");
-                y.addEventListener("click", myFunction);
-                function myFunction() {
-                                        document.getElementById("space").src = "images/h3.png";
-                                        sendMessage('h3');
-                                        var math = MathJax.Hub.getAllJax("im_space")[0];
-                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{Geometry \\hspace{1.cm} \\mathbb{H}^3}"]);
+                                        var math = MathJax.Hub.getAllJax("title")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{Sound \\hspace{0.5cm} Equation \\hspace{12.5cm} Geometry  \\hspace{0.5cm} \\mathbb{S}^2 \\times \\mathbb{E}^1 \\hspace{1cm}  }"]);
                                      }
             </script>
 
@@ -172,20 +145,9 @@
                 function myFunction() {
                                         document.getElementById("space").src = "images/h2e1.png";
                                         sendMessage('h2e1');
-                                        var math = MathJax.Hub.getAllJax("im_space")[0];
-                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{ Geometry\\hspace{1.cm} \\mathbb{H}^2 \\times \\mathbb{E}^1}"]);
-                                     }
-            </script>
-
-                        <script>
-                var x = document.getElementById("sl2");
-                x.addEventListener("click", myFunction);
-                function myFunction() {
-                                        document.getElementById("space").src = "images/h2e1.png";
-                                        sendMessage('sl2');
-                                        var math = MathJax.Hub.getAllJax("im_space")[0];
-                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{ Geometry\\hspace{1.cm} \\mathbb{SL}_2 }"]);
-                                     }
+                                        var math = MathJax.Hub.getAllJax("title")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{Sound \\hspace{0.5cm} Equation \\hspace{12.5cm} Geometry  \\hspace{0.5cm} \\mathbb{H}^2 \\times \\mathbb{E}^1 \\hspace{1cm}  }"]);
+                                    }
             </script>
 
             <script>
@@ -194,22 +156,11 @@
                 function myFunction() {
                                         document.getElementById("space").src = "images/s3.png";
                                         sendMessage('s3');
-                                        var math = MathJax.Hub.getAllJax("im_space")[0];
-                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{Geometry \\hspace{1. cm} \\mathbb{S}^3 }"]);
+                                        var math = MathJax.Hub.getAllJax("title")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{Sound \\hspace{0.5cm} Equation \\hspace{12.5cm} Geometry  \\hspace{0.5cm} \\mathbb{S}^3  \\hspace{1cm}  }"]);
                                      }
             </script>
 
-
-            <script>
-                var x = document.getElementById("nil");
-                x.addEventListener("click", myFunction);
-                function myFunction() {
-                                        document.getElementById("space").src = "images/nil.png";
-                                        sendMessage('nil');
-                                        var math = MathJax.Hub.getAllJax("im_space")[0];
-                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{ Geometry \\hspace{1. cm} \\mathbb{NIL}}"]);
-                                     }
-            </script>
 
             <script>
                 var x = document.getElementById("e3");
@@ -217,12 +168,57 @@
                 function myFunction() {
                                         document.getElementById("space").src = "images/e3.png";
                                         sendMessage('e3');
-                                        var math = MathJax.Hub.getAllJax("im_space")[0];
-                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{ Geometry \\hspace{1. cm}\\mathbb{E}^3 }"]);
+                                        var math = MathJax.Hub.getAllJax("title")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{Sound \\hspace{0.5cm} Equation \\hspace{12.5cm} Geometry  \\hspace{0.5cm} \\mathbb{E}^3  \\hspace{1cm}  }"]);
                                      }
             </script>
 
 
+<!--
+            <script>
+                var x = document.getElementById("sl2");
+                x.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/h2e1.png";
+                                        sendMessage('sl2');
+                                        var math = MathJax.Hub.getAllJax("title")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{ Geometry\\hspace{1.cm} \\mathbb{SL}_2 }"]);
+                                     }
+            </script>
+
+            <script>
+                var y = document.getElementById("h3");
+                y.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/h3.png";
+                                        sendMessage('h3');
+                                        var math = MathJax.Hub.getAllJax("title")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{Geometry \\hspace{1.cm} \\mathbb{H}^3}"]);
+                                     }
+            </script>
+
+            <script>
+                var x = document.getElementById("nil");
+                x.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/nil.png";
+                                        sendMessage('nil');
+                                        var math = MathJax.Hub.getAllJax("title")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{ Geometry \\hspace{1. cm} \\mathbb{NIL}}"]);
+                                     }
+            </script>
+
+            <script>
+                var x = document.getElementById("sol");
+                x.addEventListener("click", myFunction);
+                function myFunction() {
+                                        document.getElementById("space").src = "images/sol.png";
+                                        sendMessage('sol');
+                                        var math = MathJax.Hub.getAllJax("title")[0];
+                                        MathJax.Hub.Queue(["Text",math,"\\color{white}{ Geometry \\hspace{1cm} \\mathbb{SOL} }"]);
+                                     }
+            </script>
+-->
         </div>
 
 </body>
