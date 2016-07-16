@@ -70,7 +70,13 @@ def h2e1(F=[0.1], c=3.4e2, j_max=1):
 def hyperbolic(j_max=1):
     """ from http://homepages.lboro.ac.uk/~maas3/publications/eigdata/datafile.html """
 
-    with open(os.path.join(ESPACES_PROJECT,'dev','eigenvalues','eig-pol-1-0-500.dat'),'r') as f: 
+    name = 'eig-maxsymm-24.txt'
+    # name = 'eig-maxsymm-48.txt'
+    # name = 'eig-octagon.txt'
+    # name = 'eig-pol-1-0-500.dat'
+
+    path = os.path.join(ESPACES_PROJECT,'dev','eigenvalues',name)
+    with open(path,'r') as f: 
         l = [float(i[:-1]) for i in f.readlines()]
 
     eigen_vals =  [{'value'        : l[k],

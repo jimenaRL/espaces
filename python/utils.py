@@ -67,14 +67,14 @@ def set_folders(kind):
 
     folders = {}
 
-    folders['green_fn_im'] = os.path.join(results_path,'green_fn',kind,'images')
-    folders['green_fn_au'] = os.path.join(results_path,'green_fn',kind,'audio')
+    folders['green_fn_im'] = os.path.join(results_path,kind,'green_fn','images')
+    folders['green_fn_au'] = os.path.join(results_path,kind,'green_fn','audio')
 
-    folders['cv_im'] = os.path.join(results_path,'conv_result',kind,'images')
-    folders['cv_au'] = os.path.join(results_path,'conv_result',kind,'audio')
+    folders['cv_im'] = os.path.join(results_path,kind,'conv_result','images')
+    folders['cv_au'] = os.path.join(results_path,kind,'conv_result','audio')
 
-    folders['ev_im'] = os.path.join(results_path,'eigenvalues',kind)
-    folders['ev_au'] = os.path.join(results_path,'eigenvalues',kind)
+    folders['ev_im'] = os.path.join(results_path,kind,'eigenvalues')
+    folders['ev_au'] = os.path.join(results_path,kind,'eigenvalues')
 
     folders['es_im'] = os.path.join(results_path,'emitted_sound','images')
     folders['es_au'] = os.path.join(results_path,'emitted_sound','audio')
