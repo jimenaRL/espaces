@@ -4,7 +4,6 @@
     "ignore": [],
     "dependencies": {
         "osc.js": "2.1.0",
-        "jquery": "2.2.3",
-        "MathJax": "2.6.1"
+        "jquery": "2.2.3"
     }
 }
