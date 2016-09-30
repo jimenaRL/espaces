@@ -1,0 +1,3 @@
+webaudio conv
+    http://creativejs.com/resources/web-audio-api-getting-started/index.html
+    http://creativejs.com/resources/web-audio-api-a-bit-more-advanced/

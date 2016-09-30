@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    </head>
+
+    <body>
+        <p>Web Audio API playground</p>
+    </body>
+
+    <script>
+        // create AudioContext
+        var context;
+        if (typeof AudioContext !== "undefined") {
+            context = new AudioContext();
+        } else if (typeof webkitAudioContext !== "undefined") {
+            context = new webkitAudioContext();
+        } else {
+            throw new Error('AudioContext not supported. :(');
+        }
+
+        // load sound file using XMLHttpRequest
+        var request = new XMLHttpRequest();
+        var audioFileUrl = 'content/images/backgorund/s3.png'
+        request.open("GET", audioFileUrl, true);
+
+    </script>
+
+</html>
