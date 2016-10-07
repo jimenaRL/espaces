@@ -7,109 +7,37 @@
 
         <link rel="stylesheet" type="text/css" media="all" href="css/base.css"></link>
         <link rel="stylesheet" type="text/css" media="all" href="css/style.css"></link>
-
-        <!-- OSC -->
-        <!--
-        <script src="bower_components/osc.js/dist/osc-browser.min.js"></script>
-        <script type="text/javascript">
-
-            var port = new osc.WebSocketPort({
-                url: "ws://localhost:8080"
-            });
-
-            port.on("message", function (oscMessage) {
-                $("#message").text(JSON.stringify(oscMessage, undefined, 2));
-                console.log("message", oscMessage);
-            });
-
-            port.open();
-
-            var sendMessage = function (parameter) {
-                port.send({
-                    address: "/",
-                    args: [parameter]
-                });
-            };
-        </script>
-        -->
+        <link rel="stylesheet" type="text/css" media="all" href="css/auralizr.css"></link>
 
     </head>
 
     <body>
 
-
-        <!-- geometry main content -->
-        <!--
-        <div id='main'>
-            <img id="img_main" src="content/test.png"/>
-        </div>
-        -->
-
-        <!-- navigation bottom pannel -->
-        <div id='navigation'>
-
+        <div class="places">
             <div class="row">
 
                 <div class="col-3">
-                    <img id='e3' class="img_navigation" src="content/images/navigation/e3.png"/>
+                    <span id="e3" class="place e3"></span>
                 </div>
-                 <div class="col-3">
-                    <img id='s2e1' class="img_navigation" src="content/images/navigation/s2e1.png"/>
-                </div>
+
                 <div class="col-3">
-                    <img id='h2e1' class="img_navigation" src="content/images/navigation/h2e1.png"/>
+                    <span id="s2e1" class="place s2e1"></span>
                 </div>
+
                 <div class="col-3">
-                    <img id='s3' class="img_navigation" src="content/images/navigation/s3.png"/>
+                    <span id="h2e1" class="place h2e1"></span>
+                </div>
+
+                <div class="col-3">
+                    <span id="s3" class="place s3"></span>
                 </div>
 
             </div>
 
-             <script>
-                var x = document.getElementById("s2e1");
-                x.addEventListener("click", myFunction);
-                function myFunction() {
-                                        document.body.style.backgroundImage = "url('content/images/backgorund/s2e1.png')";
-                                        // document.getElementById("img_main").src = "content/images/main/s2e1.png";
-                                        // sendMessage('s2e1');
-                                     }
-            </script>
-
-            <script>
-                var x = document.getElementById("h2e1");
-                x.addEventListener("click", myFunction);
-                function myFunction() {
-                                        document.body.style.backgroundImage = "url('content/images/backgorund/h2e1.png')";
-                                        // document.getElementById("img_main").src = "content/images/main/h2e1.png";
-                                        // sendMessage('h2e1');
-                                    }
-            </script>
-
-            <script>
-                var x = document.getElementById("s3");
-                x.addEventListener("click", myFunction);
-                function myFunction() {
-                                        document.body.style.backgroundImage = "url('content/images/backgorund/s3.png')";
-                                        // document.getElementById("img_main").src = "content/images/main/s3.png";
-                                        // sendMessage('s3');
-                                     }
-            </script>
-
-            <script>
-                var x = document.getElementById("e3");
-                x.addEventListener("click", myFunction);
-                function myFunction() {
-                                        document.body.style.backgroundImage = "url('content/images/backgorund/e3.png')";
-                                        // document.getElementById("img_main").src = "content/images/main/e3.png";
-                                        // sendMessage('e3');
-                                     }
-            </script>
-
-
-
-
-
         </div>
+
+    <script src="lib/auralizr.js" type="text/javascript" ></script>
+    <script src="main.js" type="text/javascript"   ></script>
 
 </body>
 
