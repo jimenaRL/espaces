@@ -1,7 +1,7 @@
 import os, sys, time
 import tempfile
 
-ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
+from utils import ESPACES_PROJECT
 
 # All units in International System of Units (SI)
 
