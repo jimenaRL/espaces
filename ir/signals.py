@@ -1,5 +1,4 @@
 import pyaudio
-import wave
 import sys
 import os
 
@@ -7,13 +6,12 @@ import numpy as np
 
 import librosa
 from moviepy.audio.io import ffmpeg_audiowriter
-import audioread
 
 class Signal():
 
     """Class handling audio signal
 
-    A Signal is fairly a numpy array (called data) and a set of attributes
+    A Signal is a numpy array (called data) and a set of attributes
 
     Attributes
     ----------
