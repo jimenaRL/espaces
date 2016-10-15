@@ -14,37 +14,6 @@ import numpy as np
 
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 
-def cartesian(arrays,  out=None):
-    """
-    Generate a cartesian product of input arrays.
-    Parameters
-    ----------
-    arrays : list of array-like
-        1-D arrays to form the cartesian product of.
-    out : ndarray
-        Array to place the cartesian product in.
-    Returns
-    -------
-    out : ndarray
-        2-D array of shape (M,  len(arrays)) containing cartesian products
-        formed of input arrays.
-    """
-
-    arrays = [np.asarray(x) for x in arrays]
-    dtype = arrays[0].dtype
-
-    n = np.prod([x.size for x in arrays])
-    if out is None:
-        out = np.zeros([n,  len(arrays)],  dtype=dtype)
-
-    m = n / arrays[0].size
-    out[:, 0] = np.repeat(arrays[0],  m)
-    if arrays[1:]:
-        cartesian(arrays[1:],  out=out[0:m, 1:])
-        for j in xrange(1,  arrays[0].size):
-            out[j*m:(j+1)*m, 1:] = out[0:m, 1:]
-    return out
-
 def list2str(lst):
     lst = [lst] if type(lst)==int else lst
     lst_str = ''

@@ -11,7 +11,39 @@ import itertools
 
 import numpy as np
 
-from utils import cartesian, ESPACES_PROJECT
+from utils import ESPACES_PROJECT
+
+def _cartesian(arrays,  out=None):
+    """
+    Generate a cartesian product of input arrays.
+    Parameters
+    ----------
+    arrays : list of array-like
+        1-D arrays to form the cartesian product of.
+    out : ndarray
+        Array to place the cartesian product in.
+    Returns
+    -------
+    out : ndarray
+        2-D array of shape (M,  len(arrays)) containing cartesian products
+        formed of input arrays.
+    """
+
+    arrays = [np.asarray(x) for x in arrays]
+    dtype = arrays[0].dtype
+
+    n = np.prod([x.size for x in arrays])
+    if out is None:
+        out = np.zeros([n,  len(arrays)],  dtype=dtype)
+
+    m = n / arrays[0].size
+    out[:, 0] = np.repeat(arrays[0],  m)
+    if arrays[1:]:
+        _cartesian(arrays[1:],  out=out[0:m, 1:])
+        for j in xrange(1,  arrays[0].size):
+            out[j*m:(j+1)*m, 1:] = out[0:m, 1:]
+    return out
+
 
 def _space_product(eA_eigen_vals,eB_eigen_vals):
     """ Returns a list containing the eigen-values and their multiplicities
@@ -28,8 +60,8 @@ def _space_product(eA_eigen_vals,eB_eigen_vals):
     eA_m_factor = [ v['multiplicity'] for v in eA_eigen_vals]
     eB_m_factor = [ v['multiplicity'] for v in eB_eigen_vals]
 
-    ev_cartesian_prod = cartesian([eA_ev_factor,eB_ev_factor])
-    m_cartesian_prod = cartesian([eA_m_factor,eA_m_factor])
+    ev_cartesian_prod = _cartesian([eA_ev_factor,eB_ev_factor])
+    m_cartesian_prod = _cartesian([eA_m_factor,eA_m_factor])
 
     values         = [np.sum(ev_cartesian_prod[k]) for k in range(len(ev_cartesian_prod))]
     multiplicities = [np.prod(m_cartesian_prod[k]) for k in range(len(m_cartesian_prod))]
@@ -101,7 +133,7 @@ def n_torus(F=[0.1], c=3.4e2, j_max=1, **unusedkwargs):
     """
     n = len(F)
     k_list = [ [np.square(2*np.pi*j*F[index]/c) for j in range(1, j_max+1)] for index in range(n) ]
-    cartesian_prod = cartesian(k_list)
+    cartesian_prod = _cartesian(k_list)
     values = [np.sum(cartesian_prod[k]) for k in range(len(cartesian_prod))]
 
     eigen_vals = [ {'value' : values[k], 'multiplicity' : 2**(n-1) }
