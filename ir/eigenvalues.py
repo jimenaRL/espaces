@@ -6,12 +6,14 @@
 #                                                                            */
 # -------------------------------------------------------------------------- */
 
+# All units in International System of Units (SI)
+
 import os
 import itertools
 
 import numpy as np
 
-from utils import ESPACES_PROJECT
+ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 
 def _cartesian(arrays,  out=None):
     """
@@ -107,7 +109,7 @@ def h2e1(F=[0.1], c=3.4e2, j_max=1, kind=0, **unusedkwargs):
                        3 : 'eig-pol-1-0-500.dat',
                      }
 
-        path = os.path.join(ESPACES_PROJECT,'dev','ir','eigenvalues',kind_index[kind])
+        path = os.path.join(ESPACES_PROJECT,'dev','ir','data','eigenvalues',kind_index[kind])
         with open(path,'r') as f: 
             l = [float(i[:-1]) for i in f.readlines()]
 
@@ -190,12 +192,12 @@ def _check_params(params):
     allowed_shapes = {'s2e1':2, 'h2e1':1, 'e3':3, 's3':1}
     if not len(params['F'])==allowed_shapes[params['space']]:
             raise ValueError('Wrong shape key "%s" in eigenvalues params : %s' % (key,params))
+
     params.update({k:v if not k in params else params[k]  for k,v in default_params.items()})
 
     return params
 
-
-def eigenvalues(params):
-
-    eigenvalues_ = globals()[params['space']](**_check_params(params))
-    return eigenvalues_ 
+def get_eigenvalues(ev_params):
+    ev_params = _check_params(ev_params)
+    eigenvalues_ = globals()[ev_params['space']](**ev_params)
+    return eigenvalues_, ev_params
