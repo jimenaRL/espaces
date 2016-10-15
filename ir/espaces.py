@@ -8,181 +8,113 @@
 
 # All units in International System of Units (SI)
 
-import os
-import sys
-import time
-import itertools
+import os, sys, time
+import itertools, copy
 
-from joblib import Parallel, delayed
+# from joblib import Parallel, delayed
 
 import numpy as np
 
-import matplotlib.pyplot as plt
-
 from utils import set_paths, open_osx
-from signals import Signal
-
-from eigenvalues import *
-from green_fn import compute_green_fn, compute_green_fn_theano
-from convolutions import convolve_signals
+from ir import get_ir
 
 
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 
-PATH_ES = os.path.join(ESPACES_PROJECT,'data','examples','speech_small.wav')
+
+def espaces(ir_params):
+
+    # compute ir and eigenvalues
+    ir_signal, eigen_vals = get_ir(ir_params)
+
+    # to do rigth
+    ir_params_ = copy.deepcopy(ir_params)
+    path_args = ir_params_['ev_params']
+    path_args.update({ 'duration' : ir_params_['duration'],
+                       'nu'       : ir_params_['nu'] })
 
 
-def espaces(path_es=PATH_ES,F=[440],j_max=100,duration=1,kind='n_torus',c=3.4e2,nu=1.7e-5):
-
-    # read and save audio for emitted sound
-    sig_es = Signal(path_es,mono=True,normalize=True)
-    sampling_rate = sig_es.fs
-
-    start_t = time.time()
-
-    if kind=='n_torus':
-        eigen_vals =  n_torus(F,c,j_max)
-
-    elif kind=='sphere_3':
-        eigen_vals =  sphere_3(F,c,j_max)
-
-    elif kind=='s2e1':
-        eigen_vals =  s2e1(F,c,j_max)
-
-    elif kind=='h2e1':
-        eigen_vals =  h2e1(F,c,j_max)
-
-    # print "eigen-values  took %1.2f seconds" % ((time.time()-start_t))
-
-    # compute and save green function
-    start_t = time.time()
-    green_fn_0 = compute_green_fn(c, nu, eigen_vals, duration, sampling_rate)
-    # print "NUMPY green_fn_0 took %1.3f seconds" % ((time.time() -start_t))
-    sig_gf = Signal(green_fn_0,fs=sampling_rate,mono=True,normalize=True)
-
-
-    # compute and save green function
-    # start_t = time.time()
-    # theano_green_fn_0 = compute_green_fn_theano(c, nu, eigen_vals, duration, sampling_rate)
-    # print "THEANO green_fn_0  took %1.3f seconds" % ((time.time() -start_t))
-
-    # convolve emitted sound with the green function and save it
-    start_t = time.time()
-    sig_cv = convolve_signals(sig_es,sig_gf,kind='ola')
-    # print "convolution  took %1f milliseconds" % ((time.time() -start_t)*1e3)
-
-    # save audio and image
-
-    # set saving paths
-    if not type(F)==list:
-        F = [F]
-    gf_im_path, gf_au_path = set_paths('green_fn',kind,j_max,F,duration,c,nu)
-    cv_im_path, cv_au_path = set_paths('cv',kind,j_max,F,duration,c,nu)
-    es_im_path, es_au_path = set_paths('es',kind,j_max,F,duration,c,nu)
-    ev_im_path, _          = set_paths('ev',kind,j_max,F,duration,c,nu)
-
-    # save eigen_values
-    l = []
-    for item in eigen_vals:
-        l.extend( [item['value']]*item['multiplicity'] )
-    with open(ev_im_path[:-3]+'dat','w') as f :
+    # save eigenvalues
+    ev_im_path, _  = set_paths('ev',**path_args)
+    l = [item['value']*item['multiplicity'] for item in eigen_vals]
+    with open(ev_im_path[:-3]+'dat','w') as f:
         f.writelines( ['%1.20f\n' % i for i in l])
 
-    # if not os.path.exists(es_au_path):
-    #     sig_es.write(es_au_path)
-    # if not os.path.exists(es_im_path):
-    #     sig_es.save_image(es_im_path, title='emitted sound')
-
-    sig_gf.write(gf_au_path)
-    # sig_gf.save_image(gf_im_path, title='green_fn_0')
-
-    # sig_cv.write(cv_au_path)
-    # sig_cv.save_image(cv_im_path, title='reverberated sound')
-
-    # look at results
-    # open_osx(cv_im_path,gf_im_path,ev_im_path)
-    # sig_cv.play()
-    # sig_gf.play()
-    # os.system("osascript -e 'quit app \"Preview\"'")
-
-    # plt.close('all')
-
-# def compute_s2e1():
-
-#     # s2e1
-#     j_max = 100
-#     duration = .0
-
-#     c = 3.4e2
-#     nu = 1.7e-5 * .5e3
+    # save ir
+    ir_im_path, ir_au_path = set_paths('green_fn',**path_args)
+    ir_signal.write(ir_au_path)
+    ir_signal.save_image(ir_im_path, title='green_fn_0')
 
 
-#     kind = 's2e1'
+def compute_s2e1():
 
-#     f1 = np.linspace(0.1,5.,10)
-#     f2 = np.linspace(5.,10.,10)
+    ir_params = {  'ev_params'      : {'space':'s2e1', 'c':3.4e2, 'j_max':100},
+                   'duration'       : 15.0,
+                   'nu'             : 1.7e-5 * .5e3,
+                   'sampling_rate'  : 8000,
+                }
 
-#     for F in itertools.product(f1,f2):
-#         print 'kind %s \t F %s' % (kind,str(F))
-#         espaces(PATH_ES,F,j_max,duration,kind,c,nu)
+    f1 = np.linspace(0.1,5.,10)
+    f2 = np.linspace(5.,10.,10)
 
-# def compute_h2e1():
+    for F in itertools.product(f1,f2):
+        print "\n--------%s--------\n" % ir_params
+        ir_params['ev_params']['F'] = F
+        espaces(ir_params)
 
-#     # h2e1
+def compute_h2e1():
 
-#     c = 3.4e2
-#     nu = 1.7e-5 * .5e3
+    ir_params = {  'ev_params'      : {'space':'h2e1', 'c':3.4e2, 'j_max':1000},
+                   'duration'       : 15.0,
+                   'nu'             : 1.7e-5 * .5e3,
+                   'sampling_rate'  : 8000,
+                }
 
-#     j_max = 1000
-#     duration = 1.0
+    f1 = np.linspace(10,100,10)
+    for F in f1:
+        print "\n--------%s--------\n" % ir_params
+        ir_params['ev_params']['F'] = [F]
+        espaces(ir_params)
 
-#     f1 = np.linspace(10,100,10)
-#     kind = 'h2e1'
-#     for F in f1:
-#         print '%s %s' % (kind,str(F))
-#         espaces(PATH_ES,[F],j_max,duration,kind,c,nu)
+def compute_e3():
 
-### OK
-# def compute_torus_3():
+    ir_params = {  'ev_params'      : {'space':'e3', 'c':3.4e2, 'j_max':25},
+                   'duration'       : 15.0,
+                   'nu'             : 1.7e-5,
+                   'sampling_rate'  : 8000,
+                }
 
-#     # ceci marche bien  OK 
-#     c = 3.4e2
-#     nu = 1.7e-5
+    space = 'n_torus'
 
-#     j_max = 25
-#     duration  = 2.0
+    for F in ( [100,100,100], [50,50,50], [100,50,75]):
+        print "\n--------%s--------\n" % ir_params
+        ir_params['ev_params']['F'] = F
+        espaces(ir_params)
+ 
 
-#     kind = 'n_torus'
-
-#     # F = [100,100,100]
-#     # F = [50,50,50]
-#     # F = [100,50,75]
-
-#     espaces(PATH_ES,F,j_max,duration,kind,c,nu)
+    espaces(PATH_ES,F,j_max,duration,space,c,nu)
 
 
-def compute_sphere_3():
+def compute_s3():
 
-    # 3-torus
-    j_max = 100
-    duration = 2.0
+    ir_params = {  'ev_params'      : {'space':'s3', 'c':3.4e2, 'j_max':200},
+                   'duration'       : 15.0,
+                   'nu'             : 1.7e-5 * .5e3,
+                   'sampling_rate'  : 8000,
+                }
 
-    c = 3.4e2
-    nu = 1.7e-5 * .5e3
-
-    F = 0.5
-    kind = 'sphere_3'
-
-    print 'kind %s \t F %s' % (kind,str(F))
-    espaces(PATH_ES,F,j_max,duration,kind,c,nu)
+    f1 = np.linspace(0.5,0.5,1)
+    for F in f1:
+        print "\n--------%s--------\n" % ir_params
+        ir_params['ev_params']['F'] = [F]
+        espaces(ir_params)
 
 
 if __name__:
 
-    # compute_torus_3() OK
-
-    compute_sphere_3()
-    # compute_s2e1()
-    # compute_h2e1()
+    compute_e3()
+    compute_s3()
+    compute_s2e1()
+    compute_h2e1()
 
 

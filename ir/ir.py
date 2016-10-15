@@ -7,6 +7,7 @@
 # -------------------------------------------------------------------------- */
 
 # All units in International System of Units (SI)
+import copy
 
 from eigenvalues import get_eigenvalues
 from green_fn import compute_green_fn
@@ -44,13 +45,14 @@ def get_ir(ir_params):
 
     ir_params = _check_params(ir_params)
     eigen_vals, ev_params = get_eigenvalues(ir_params['ev_params'])
-    ir_params.update({'eigen_vals':eigen_vals, 'c':ev_params['c']})
-    del ir_params['ev_params']
+    ir_params_ = copy.deepcopy(ir_params)
+    ir_params_.update({'eigen_vals':eigen_vals, 'c':ev_params['c']})
+    del ir_params_['ev_params']
 
-    green_fn_0 = compute_green_fn(**ir_params)
+    green_fn_0 = compute_green_fn(**ir_params_)
 
-    sig_gf = Signal(green_fn_0,fs=ir_params['sampling_rate'],mono=True,normalize=True)
+    sig_gf = Signal(green_fn_0,fs=ir_params_['sampling_rate'],mono=True,normalize=True)
 
-    return sig_gf
+    return sig_gf, eigen_vals
 
 
