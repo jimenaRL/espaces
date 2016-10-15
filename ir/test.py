@@ -3,8 +3,7 @@ import tempfile
 
 # from utils import  open_osx
 
-# from convolutions import convolve_signals
-from signals import Signal
+
 # from espaces import espaces
 
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
@@ -20,8 +19,10 @@ def test_compute_green_fn():
     from green_fn import compute_green_fn
     compute_green_fn(c=1, nu=1,  eigen_vals=[{'multiplicity':1, 'value':1}], duration=0.1,sampling_rate=8000)
 
+
 def test_signals():
 
+    from signals import Signal
     test_track = os.path.join(ESPACES_PROJECT, "dev", "ir", "data", "crash.wav")
 
     args = {"normalize": False, "mono": False}
@@ -38,6 +39,10 @@ def test_signals():
 
     with tempfile.NamedTemporaryFile(suffix='.mp3') as output_file:
         sigmono.write(output_file.name)
+
+
+    from convolutions import convolve_signals
+    convolve_signals(sig,sig,mode='full',kind='ss')
 
 # def test(save=False,open=False):
 
