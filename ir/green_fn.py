@@ -8,9 +8,16 @@
 
 # All units in International System of Units (SI)
 
+import os
 from tqdm import tqdm
 import numpy as np
+from joblib import Memory
 
+from utils import ESPACES_PROJECT
+
+memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"))
+
+@memory.cache
 def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate):
     """ Returns the Green function at x=0 of the wave equation 
         in a manifold M defined by its eigen-values.

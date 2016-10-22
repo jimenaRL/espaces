@@ -14,6 +14,10 @@ import itertools
 import numpy as np
 from utils import cartesian, ESPACES_PROJECT
 
+from joblib import Memory
+memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"))
+
+
 def _space_product(eA_eigen_vals,eB_eigen_vals):
     """ Returns a list containing the eigen-values and their multiplicities
         of the Laplacien in the E_A X E_B manifold.
@@ -117,6 +121,11 @@ def e3(F=[0.1,0.1,0.1], c=3.4e2, j_max=1, **unusedkwargs):
     return n_torus(F,c,j_max)
 
 
+def e1(F=[0.1], c=3.4e2, j_max=1, **unusedkwargs):
+    assert(len(F)==1)
+    return n_torus(F,c,j_max)
+
+
 def s2(F=[0.1], c=3.4e2, j_max=1):
     """ Returns a list containing eigen-values of the Laplacien in the 2-sphere manifold. 
         c     : [float] sound velocity
@@ -156,7 +165,7 @@ def _check_params(params):
     if not params['space'] in globals():
         raise ValueError('Not implemented space: "%s"' % params['space'])
 
-    allowed_shapes = {'s2e1':2, 'h2e1':1, 'e3':3, 's3':1}
+    allowed_shapes = {'s2e1':2, 'h2e1':1, 'e3':3, 's3':1,'e1':1}
     if not len(params['F'])==allowed_shapes[params['space']]:
             raise ValueError('Wrong shape key "%s" in eigenvalues params : %s' % (key,params))
 
@@ -164,6 +173,8 @@ def _check_params(params):
 
     return params
 
+
+@memory.cache
 def get_eigenvalues(ev_params):
     ev_params = _check_params(ev_params)
     eigenvalues_ = globals()[ev_params['space']](**ev_params)
