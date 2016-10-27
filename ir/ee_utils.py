@@ -64,7 +64,8 @@ def set_folders(space):
 def get_paths(space,j_max,F,duration,c,nu):
     """ """
     folders = set_folders(space)
-    name  = '%s_j_max_%i_freq_prop_%s_c_%1.1f_nu_%1.5f_dur_%1.1f' % (space,j_max,F,c,nu,duration)
+    Fstr = '_'.join([str(f) for f in F])
+    name  = '%s_j_max_%i_freq_prop_%s_c_%1.1f_nu_%1.5f_dur_%1.1f' % (space,j_max,Fstr,c,nu,duration)
     au_path = os.path.join(folders['green_fn_au'],name+'.wav')
     ev_path = os.path.join(folders['ev'],name+'.tsv')
     im_path = os.path.join(folders['green_fn_im'],name+'.png')

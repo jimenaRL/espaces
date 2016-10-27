@@ -1,11 +1,11 @@
 import os, sys, time
 import tempfile
 
-from utils import ESPACES_PROJECT
+from ee_utils import ESPACES_PROJECT
 
 # All units in International System of Units (SI)
 
-from ir import get_ir
+from impulse_reponse import get_ir
 from eigenvalues import get_eigenvalues
 from green_fn import compute_green_fn
 
@@ -25,6 +25,10 @@ def test_eigenvalues():
 
 def test_compute_green_fn():
     compute_green_fn(c=1, nu=1,  eigen_vals=[{'multiplicity':1, 'value':1}], duration=0.1,sampling_rate=8000)
+
+def espaces():
+    # TO DO
+    pass
 
 
 def test_signals_conv():
@@ -68,5 +72,5 @@ def profiling():
     stats.sort_stats('time')
     stats.print_stats(10)
 
-if __name__=='__main__':
-    profiling()
+# if __name__=='__main__':
+    # profiling()

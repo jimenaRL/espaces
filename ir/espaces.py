@@ -15,8 +15,17 @@ import itertools, copy
 
 import numpy as np
 
-from utils import get_paths, cartesian
-from ir import get_ir
+from ee_utils import get_paths, cartesian
+from impulse_reponse import get_ir
+
+class EspaceClient(object):
+
+    def __init__(self):
+        pass
+
+    def handle_request(self,ir_params):
+        saved_audio_path = espaces(ir_params)
+        return {'saved_audio_path':saved_audio_path}
 
 
 def espaces(ir_params):
@@ -40,6 +49,8 @@ def espaces(ir_params):
     ir_signal.write(au_path)
     ir_signal.save_image(im_path, title='impulse response')
 
+    print "audio saved at %s" % au_path
+    return au_path
 
 def compute_s2e1():
 
@@ -101,12 +112,11 @@ def compute_s3():
         ir_params['ev_params']['F'] = [F]
         espaces(ir_params)
 
-if __name__:
-    pass
+# if __name__:
 
-    # compute_s3()
-    # compute_h2e1()
-    # compute_s2e1()
-    # compute_e3()
+#     compute_s3()
+#     compute_h2e1()
+#     compute_s2e1()
+#     compute_e3()
 
 

@@ -12,10 +12,10 @@ import os
 import itertools
 
 import numpy as np
-from utils import cartesian, ESPACES_PROJECT
+from ee_utils import cartesian, ESPACES_PROJECT
 
 from joblib import Memory
-memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"))
+memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"),verbose=0)
 
 
 def _space_product(eA_eigen_vals,eB_eigen_vals):
