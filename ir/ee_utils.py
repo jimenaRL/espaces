@@ -13,6 +13,8 @@ import numpy as np
 
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 
+SIMPLE_PATHS = True
+
 def cartesian(arrays,  out=None):
     """
     Generate a cartesian product of input arrays.
@@ -47,13 +49,17 @@ def cartesian(arrays,  out=None):
 def set_folders(space):
     """ """
 
-    results_path = os.path.join(ESPACES_PROJECT,'data','results',date.today().isoformat())
-
     folders = {}
 
-    folders['green_fn_im'] = os.path.join(results_path,space,'green_fn','images')
-    folders['green_fn_au'] = os.path.join(results_path,space,'green_fn','audio')
-    folders['ev'] = os.path.join(results_path,space,'eigenvalues')
+    if SIMPLE_PATHS:
+        results_path = os.path.join(ESPACES_PROJECT,'data')
+        folders['audio'] = os.path.join(results_path,space)
+
+    else:
+        results_path = os.path.join(ESPACES_PROJECT,'data','dates',date.today().isoformat())
+        folders['evs'] = os.path.join(results_path,space,'eigenvalues')
+        folders['image'] = os.path.join(results_path,space,'green_fn','images')
+        folders['audio'] = os.path.join(results_path,space,'green_fn','audio')
 
     for folder in folders.values():
         if not os.path.exists(folder):
@@ -61,13 +67,22 @@ def set_folders(space):
 
     return folders
 
-def get_paths(space,j_max,F,duration,c,nu):
+
+def get_paths(**kwargs):
     """ """
-    folders = set_folders(space)
-    Fstr = '_'.join([str(f) for f in F])
-    name  = '%s_j_max_%i_freq_prop_%s_c_%1.1f_nu_%1.5f_dur_%1.1f' % (space,j_max,Fstr,c,nu,duration)
-    au_path = os.path.join(folders['green_fn_au'],name+'.wav')
-    ev_path = os.path.join(folders['ev'],name+'.tsv')
-    im_path = os.path.join(folders['green_fn_im'],name+'.png')
-    return au_path, ev_path, im_path
+
+    kwargs['F'] = '_'.join([str(f) for f in kwargs.get('F',[])])
+    name  = '_'.join(["%s_%s" % (k,v) for k,v in kwargs.iteritems()])
+    folders = set_folders(kwargs.get('space','unknown'))
+
+    paths = {}
+
+    paths['audio'] = os.path.join(folders['audio'],name+'.wav')
+
+    if 'evs' in folders:
+        paths['evs'] = os.path.join(folders['evs'],name+'.tsv')
+    if 'image' in folders:
+        paths['image'] = os.path.join(folders['image'],name+'.png')
+
+    return paths
 

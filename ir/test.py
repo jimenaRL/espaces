@@ -8,12 +8,13 @@ from ee_utils import ESPACES_PROJECT
 from impulse_reponse import get_ir
 from eigenvalues import get_eigenvalues
 from green_fn import compute_green_fn
+from espaces import espaces
 
 def test_ir():
     ir_params = { 'ev_params'       : {'space':'e3', 'F':[0.1,0.1,0.1], 'j_max':1},
-                   'duration'       : 0.1,
+                   'duration'       : 0.01,
                    'nu'             : 1.7e-5,
-                   'sampling_rate'  : 8000,
+                   'sampling_rate'  : 44100,
                 }
     get_ir(ir_params)
 
@@ -26,9 +27,13 @@ def test_eigenvalues():
 def test_compute_green_fn():
     compute_green_fn(c=1, nu=1,  eigen_vals=[{'multiplicity':1, 'value':1}], duration=0.1,sampling_rate=8000)
 
-def espaces():
-    # TO DO
-    pass
+def test_espaces():
+    ir_params = { 'ev_params'       : {'space':'s3', 'F':[0.1], 'j_max':1,},
+                   'duration'       : 0.01,
+                   'nu'             : 1.7e-5,
+                   'sampling_rate'  : 44100,
+                }
+    espaces(ir_params)
 
 
 def test_signals_conv():
@@ -72,5 +77,6 @@ def profiling():
     stats.sort_stats('time')
     stats.print_stats(10)
 
-# if __name__=='__main__':
+if __name__=='__main__':
+    pass
     # profiling()

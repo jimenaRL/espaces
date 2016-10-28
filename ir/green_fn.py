@@ -15,9 +15,9 @@ from joblib import Memory
 
 from ee_utils import ESPACES_PROJECT
 
-memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"),verbose=1)
+# memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"),verbose=1)
 
-@memory.cache
+# @memory.cache
 def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,p=1):
     """ Returns the Green function at x=0 of the wave equation 
         in a manifold M defined by its eigen-values.
@@ -41,7 +41,7 @@ def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,p=1):
 
     green_fn_0 = np.zeros(dur_points)
 
-    import matplotlib.pyplot as plt
+    # import matplotlib.pyplot as plt
 
     for ev_j in tqdm(eigen_vals):
         value = ev_j['value']
@@ -60,8 +60,9 @@ def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,p=1):
 
     green_fn_0 /= np.abs(green_fn_0).max()
 
-        # plt.figure()
-        # plt.plot(green_fn_0)
-        # plt.show()
-        # print np.abs(green_fn_i_norm).max()
+    # plt.figure()
+    # plt.plot(green_fn_0)
+    # plt.show()
+    # print np.abs(green_fn_i_norm).max()
+
     return green_fn_0

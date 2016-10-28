@@ -14,8 +14,8 @@ import itertools
 import numpy as np
 from ee_utils import cartesian, ESPACES_PROJECT
 
-from joblib import Memory
-memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"),verbose=0)
+# from joblib import Memory
+# memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"),verbose=0)
 
 
 def _space_product(eA_eigen_vals,eB_eigen_vals):
@@ -174,7 +174,7 @@ def _check_params(params):
     return params
 
 
-@memory.cache
+# @memory.cache
 def get_eigenvalues(ev_params):
     ev_params = _check_params(ev_params)
     eigenvalues_ = globals()[ev_params['space']](**ev_params)
