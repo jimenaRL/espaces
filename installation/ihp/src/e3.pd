@@ -1,0 +1,55 @@
+#N canvas 786 117 544 554 10;
+#X declare -lib mrpeach;
+#X obj 34 434 packOSC;
+#X obj 128 249 samplerate~;
+#X obj 100 435 print;
+#X obj 32 62 float 9002;
+#X text 140 118 sound speed;
+#X text 145 145 j_max;
+#X text 153 181 duration;
+#X text 184 219 viscocity;
+#X text 210 248 sampling rate from Pd [do not change];
+#X obj -82 -43 import mrpeach;
+#X obj -75 461 outlet;
+#X text -73 486 osc message outlet;
+#X text -93 -384 TO DO : check effect of FFT size on conv object !
+;
+#X obj 66 116 inlet;
+#X obj 160 -206 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 170 -196 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj -80 16 inlet;
+#X text -82 -13 bang inlet;
+#X obj 83 145 inlet;
+#X obj 98 179 inlet;
+#X obj 113 209 inlet;
+#X obj 144 278 inlet;
+#X text 116 59 osc reponse port [do not change];
+#X text 131 88 space [do not change];
+#X obj 158 305 inlet;
+#X text 194 277 frequency 1;
+#X obj 174 329 inlet;
+#X text 206 302 frequency 2;
+#X text 231 325 frequency 3;
+#X obj 33 359 pack f s f f f f f f f f;
+#X msg 33 391 send /espaces \$1 \$2 \$3 \$4 \$5 \$6 \$7 \$8 \$9 \$10
+;
+#X msg 48 89 symbol e3;
+#X connect 0 0 10 0;
+#X connect 1 0 29 6;
+#X connect 3 0 29 0;
+#X connect 13 0 29 2;
+#X connect 16 0 3 0;
+#X connect 16 0 31 0;
+#X connect 16 0 1 0;
+#X connect 18 0 29 3;
+#X connect 19 0 29 4;
+#X connect 20 0 29 5;
+#X connect 21 0 29 7;
+#X connect 24 0 29 8;
+#X connect 26 0 29 9;
+#X connect 29 0 30 0;
+#X connect 30 0 0 0;
+#X connect 30 0 2 0;
+#X connect 31 0 29 1;

@@ -1,0 +1,25 @@
+#N canvas 437 126 585 403 10;
+#X obj -327 79 soundfiler;
+#X obj -426 -1 t b s;
+#X msg -327 52 read -resize \$1 ir;
+#X obj -493 72 partconv~ ir 8192;
+#X msg -427 36 set ir;
+#X obj -325 2 print;
+#X obj -427 -31 inlet;
+#X obj -493 -31 inlet~;
+#X obj -493 113 outlet~;
+#X obj -98 107 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj -97 43 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj -133 221 print usign convolver;
+#X connect 1 0 4 0;
+#X connect 1 1 2 0;
+#X connect 1 1 5 0;
+#X connect 2 0 0 0;
+#X connect 3 0 8 0;
+#X connect 4 0 3 0;
+#X connect 6 0 1 0;
+#X connect 7 0 3 0;
+#X connect 9 0 11 0;
+#X connect 10 0 9 0;
