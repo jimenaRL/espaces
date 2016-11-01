@@ -1,4 +1,4 @@
-#N canvas 413 23 1061 817 10;
+#N canvas 640 27 1061 817 10;
 #X declare -lib mrpeach;
 #X declare -lib mrpeach;
 #X declare -lib mrpeach;
@@ -8,7 +8,7 @@
 #X obj -260 -222 openpanel;
 #X obj -261 -265 bng 32 250 50 0 empty empty empty 0 -6 0 8 -4034 -1
 -1;
-#X msg -330 -266 \; pd dsp 1;
+#X msg -330 -294 \; pd dsp 1;
 #X obj -109 92 dac~;
 #X obj -110 28 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
@@ -98,14 +98,12 @@
 #X obj -330 70 drywet~;
 #X obj -285 10 hsl 128 10 0 127 0 0 empty empty empty -2 -8 0 10 -204786
 -1 -1 0 1;
-#X obj -330 -159 adc~ 1;
+#X obj -312 -152 adc~ 1;
 #X obj -311 -107 convolver;
 #X obj -307 -65 dac~;
-#X connect 0 0 2 0;
 #X connect 0 0 3 0;
 #X connect 1 0 83 1;
 #X connect 2 0 1 0;
-#X connect 3 0 82 0;
 #X connect 5 0 76 0;
 #X connect 7 0 19 0;
 #X connect 7 0 20 0;
