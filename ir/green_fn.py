@@ -18,7 +18,7 @@ from ee_utils import ESPACES_PROJECT
 # memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"),verbose=1)
 
 # @memory.cache
-def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,p=1):
+def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,p=None):
     """ Returns the Green function at x=0 of the wave equation 
         in a manifold M defined by its eigen-values.
 
@@ -46,7 +46,7 @@ def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,p=1):
     for ev_j in tqdm(eigen_vals):
         value = ev_j['value']
         multiplicity = ev_j['multiplicity']
-        green_fn_i = multiplicity * np.exp( (-1) * nu * value * t_discret ) * np.sin( np.sqrt(value * c - value * value * nu * nu) * t_discret )
+        green_fn_i = multiplicity * np.exp( (-1) * nu * value * t_discret ) * np.cos( np.sqrt(value) * c *  np.sqrt(1-(value*nu*nu/(c*c))) * t_discret)
 
         # normalisation l^p or l^infty
         if p is None:
