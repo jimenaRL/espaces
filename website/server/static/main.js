@@ -1,22 +1,22 @@
 var auralizr = new Auralizr();
 
-var impulseResponses = {
-    'h2e1' : 'content/ir/h.wav',
-    's2e1' : 'content/ir/s2e1.wav',
-    'e3'   : 'content/ir/e3.wav',
-    's3'   : 'content/ir/s3.wav ',
+var data = {
+    'h2e1' : {'ir':'content/ir/ecm_20160719/h2e1.wav', 'image':'content/images/background/h2e1.png'},
+    's2e1' : {'ir':'content/ir/ecm_20160719/s2e1.wav', 'image':'content/images/background/s2e1.png'},
+    'e3'   : {'ir':'content/ir/ecm_20160719/e3.wav',   'image':'content/images/background/e3.png'},
+    's3'   : {'ir':'content/ir/ecm_20160719/s3.wav',   'image':'content/images/background/s3.png'},
 };
 
 if (auralizr.userMediaSupport){
     var onAuralizrLoad = function (key){
             var element = document.getElementsByClassName(key)[0];
             if (element) {
-                enableClickFunctionality(element,key);
+                enableClickFunctionality(data[key]['image'],element,key);
                 element.innerHTML = '▶';
             }
         };
-    for (var key in impulseResponses){
-        auralizr.load(impulseResponses[key], key, onAuralizrLoad);
+    for (var key in data){
+        auralizr.load(data[key]['ir'], key, onAuralizrLoad);
     }
 }
 
@@ -34,12 +34,11 @@ function enableThisSpan(element){
     element.innerHTML = '❚❚';
 }
 
-function enableClickFunctionality(element,key){
+function enableClickFunctionality(url_str,element,key){
     element.addEventListener('click',function(event){
 
-        url_str = "url('content/images/background/"+key+".png')"
         console.log('load image from '+url_str)
-        document.body.style.backgroundImage = url_str
+        document.body.style.backgroundImage = "url('"+url_str+"')"
 
         if (element.innerHTML === '▶'){
             resetAllSpans();
