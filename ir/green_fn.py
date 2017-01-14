@@ -18,7 +18,7 @@ from ee_utils import ESPACES_PROJECT
 # memory = Memory(cachedir=os.path.join(ESPACES_PROJECT,"data","joblib_cache"),verbose=1)
 
 # @memory.cache
-def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,p=None):
+def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate):
     """ Returns the Green function at x=0 of the wave equation 
         in a manifold M defined by its eigen-values.
 
@@ -27,7 +27,6 @@ def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,p=None):
         eigen_vals      : [list of dict] eigen-values and their multiplicities of a manifold M 
         duration        : [float] duration of the Green function in seconds
         sampling_rate   : [int] sampling rate of the output
-        p               : [str] type of normalisation TO EXPLAIN BETTER
     """
 
     # convert to correct type for precaution
@@ -41,28 +40,10 @@ def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate,p=None):
 
     green_fn_0 = np.zeros(dur_points)
 
-    # import matplotlib.pyplot as plt
-
     for ev_j in tqdm(eigen_vals):
         value = ev_j['value']
         multiplicity = ev_j['multiplicity']
-        green_fn_i = multiplicity * np.exp( (-1) * nu * value * t_discret ) * np.cos( np.sqrt(value) * c *  np.sqrt(1-(value*nu*nu/(c*c))) * t_discret)
-
-        # normalisation l^p or l^infty
-        if p is None:
-            norm_i = 1
-        elif int(p)==-1:
-            norm_i = np.abs(green_fn_i).max()
-        else:
-            norm_i = ((green_fn_i**p).sum())**(1/p)
-
-        green_fn_0 += (1/norm_i) * green_fn_i
-
-    green_fn_0 /= np.abs(green_fn_0).max()
-
-    # plt.figure()
-    # plt.plot(green_fn_0)
-    # plt.show()
-    # print np.abs(green_fn_i_norm).max()
+        green_fn_i = multiplicity * np.exp( (-1) * nu * value * t_discret ) * np.sin( np.sqrt(value) * c *  np.sqrt(1-(value*nu*nu/(c*c))) * t_discret)
+        green_fn_0 += green_fn_i
 
     return green_fn_0
