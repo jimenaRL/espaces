@@ -1,15 +1,21 @@
-# Icecast in Docker [![Build Status](https://travis-ci.org/moul/docker-icecast.svg?branch=master)](https://travis-ci.org/moul/docker-icecast)
+# Icecast in Dockerfor espace-imaginaires project
 
-Icecast2 Dockerfile
-
-[![](http://dockeri.co/image/moul/icecast)](https://index.docker.io/u/moul/icecast/)
+See http://icecast.org/docs for icecast docs.
+Inspired from https://github.com/moul/docker-icecast.
 
 ## Run
 
 Run with default password, export port 8000
 
 ```bash
-docker run -p 8000:8000 moul/icecast
+docker run -p 8000:8000 espaces-imaginaires  
+$BROWSER localhost:8000
+```
+
+Run interactively with default password, export port 8000
+
+```bash
+docker run -it -p 8000:8000 espaces-imaginaires  
 $BROWSER localhost:8000
 ```
 
@@ -50,11 +56,3 @@ icecast:
   - 8000:8000
 ```
 
-## Examples
-
-- https://github.com/ultreme/scc-radio/
-
-
-## License
-
-[MIT](https://github.com/moul/docker-icecast/blob/master/LICENSE.md)

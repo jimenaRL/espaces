@@ -50,6 +50,9 @@
     listings. -->
     <hostname>localhost</hostname>
 
+    <location>Paris-France</location>
+    <admin>wjimena@egmail.com</admin>
+
     <!-- You may have multiple <listener> elements -->
     <listen-socket>
         <port>8000</port>
