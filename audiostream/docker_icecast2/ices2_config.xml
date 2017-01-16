@@ -16,9 +16,10 @@
     <stream>
         <!-- metadata used for stream listing (not currently used) -->
         <metadata>
-            <name>Example stream name</name>
-            <genre>Example genre</genre>
-            <description>A short description of your stream</description>
+            <name>Espaces Imaginaires</name>
+            <genre>Experimental</genre>
+            <description>Audio stream for Espaces Imaginaires installation at IHP.</description>
+            <url>https://jimena.freeboxos.fr</url>
         </metadata>
 
         <!-- input module
@@ -32,7 +33,7 @@
         <input>
             <module>playlist</module>
             <param name="type">basic</param>
-            <param name="file">/stream/ogg/playlist.txt</param>
+            <param name="file">/stream/playlist.txt</param>
             <!-- random play -->
             <param name="random">0</param>
             <!-- if the playlist get updated that start at the beginning -->
@@ -58,8 +59,8 @@
                 the source password and mountpoint.  -->
             <hostname>icecast2</hostname>
             <port>8000</port>
-            <password>hackme</password>
-            <mount>/audio</mount>
+            <password>espaces</password>
+            <mount>/stream</mount>
 
             <!-- Reconnect parameters:
                 When something goes wrong (e.g. the server crashes, or the
@@ -88,9 +89,19 @@
                 match the input data for channels and sample rate. That
                 restriction will be relaxed in the future.
             -->
+
+            <!-- TO TEST
+            <resample>
+                <in-rate>44100</in-rate>
+                <out-rate>22050</out-rate>
+            </resample>
+            <downmix>0</downmix>
+            -->
+
             <encode>
-                <nominal-bitrate>64000</nominal-bitrate> <!-- bps. e.g. 64000 for 64 kbps -->
+                <quality>10</quality>
                 <samplerate>44100</samplerate>
+                <flush-samples>44100</flush-samples>
                 <channels>2</channels>
             </encode>
         </instance>

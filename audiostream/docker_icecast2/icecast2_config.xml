@@ -2,8 +2,8 @@
     <!-- location and admin are two arbitrary strings that are e.g. visible
          on the server info page of the icecast web interface
          (server_version.xsl). -->
-    <location>Earth</location>
-    <admin>icemaster@localhost</admin>
+    <location>Paris, France</location>
+    <admin>jimena@melix.net</admin>
 
     <!-- IMPORTANT!
          Especially for inexperienced users:
@@ -34,13 +34,13 @@
 
     <authentication>
         <!-- Sources log in with username 'source' -->
-        <source-password>hackme</source-password>
+        <source-password>espaces</source-password>
         <!-- Relays log in with username 'relay' -->
-        <relay-password>hackme</relay-password>
+        <relay-password>espaces</relay-password>
 
         <!-- Admin logs in with the username given below -->
         <admin-user>admin</admin-user>
-        <admin-password>hackme</admin-password>
+        <admin-password>espaces</admin-password>
     </authentication>
 
     <!-- set the mountpoint for a shoutcast source to use, the default if not
@@ -145,7 +145,7 @@
 
     <!-- Normal mounts -->
 
-    <mount type="normal">
+    <!-- <mount type="normal">
         <mount-name>/test.ogg</mount-name>
 
         <username>othersource</username>
@@ -159,7 +159,7 @@
         <fallback-when-full>1</fallback-when-full>
         <public>1</public>
 
-    </mount>
+    </mount> -->
 
 
     <!--
