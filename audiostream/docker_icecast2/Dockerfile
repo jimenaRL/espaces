@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y icecast2 ices2 && rm -rf /var/lib/apt/l
 ADD ./stream /stream
 ADD . /app
 
-RUN mkdir -p /var/log/ices/  &&  chmod 777 /var/log/ices/ && chmod +x /app/start.sh && chown -R icecast2.icecast /app
+RUN mkdir -p /var/log/ices/  &&  chmod 777 /var/log/ices/ && chown -R icecast2.icecast /app
 
 USER icecast2
 WORKDIR /app
