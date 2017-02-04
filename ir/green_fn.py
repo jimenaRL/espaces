@@ -43,7 +43,7 @@ def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate):
     for ev_j in tqdm(eigen_vals):
         value = ev_j['value']
         multiplicity = ev_j['multiplicity']
-        green_fn_i = multiplicity * np.exp( (-1) * nu * value * t_discret ) * np.sin( np.sqrt(value) * c *  np.sqrt(1-(value*nu*nu/(c*c))) * t_discret)
+        green_fn_i = multiplicity * np.exp( (-1) * nu * value * t_discret ) * np.cos( np.sqrt(value) * c *  np.sqrt(1-(value*nu*nu/(c*c))) * t_discret)
         green_fn_0 += green_fn_i
 
     return green_fn_0
