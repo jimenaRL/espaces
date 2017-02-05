@@ -108,10 +108,10 @@ def n_torus(F=[0.1], c=3.4e2, j_max=1, **unusedkwargs):
     k_list = [ [np.square(2*np.pi*j*F[index]/c) for j in range(1, j_max+1)] for index in range(n) ]
     cartesian_prod = cartesian(k_list)
     values = [np.sum(cartesian_prod[k]) for k in range(len(cartesian_prod))]
-
-    eigen_vals = [ {'value' : values[k], 'multiplicity' : 2**(n-1) }
-                  for k in range(len(values))
-                  ]
+    # remove repetitive values
+    values = set(values)
+    # and count for multiplicities
+    eigen_vals = [ {'value' : v, 'multiplicity' : 2**(n-1) } for v in values ]
 
     return eigen_vals
 
