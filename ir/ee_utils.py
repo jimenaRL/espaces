@@ -13,8 +13,6 @@ import numpy as np
 
 ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
 
-SIMPLE_PATHS = True
-
 def cartesian(arrays,  out=None):
     """
     Generate a cartesian product of input arrays.
@@ -46,12 +44,12 @@ def cartesian(arrays,  out=None):
             out[j*m:(j+1)*m, 1:] = out[0:m, 1:]
     return out
 
-def set_folders(space):
+def set_folders(space,simple_paths=False):
     """ """
 
     folders = {}
 
-    if SIMPLE_PATHS:
+    if simple_paths:
         results_path = os.path.join(ESPACES_PROJECT,'data')
         folders['audio'] = os.path.join(results_path,space)
 
