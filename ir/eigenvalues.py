@@ -101,7 +101,7 @@ def h2e1(F=[0.1], c=3.4e2, j_max=1, kind=0, **unusedkwargs):
 def n_torus(F=[0.1], c=3.4e2, j_max=1, **unusedkwargs):
     """ Returns a list containing eigen-values of -Delta (negative Laplacien) in the n-torus manifold. 
         c     : [float] sound velocity
-        F     : [list] list of length = containing c/l1, c/l2, ...; where l1, l2, ... are the n-torus lengths
+        F     : [list] list of length n containing c/l1, c/l2, ...; where l1, l2, ... are the n-torus lengths
         j_max : [int] set index of eigen-values to compute as {-j_max, ..., j_max} in each direction
     """
     n = len(F)
