@@ -20,7 +20,7 @@ from ee_utils import cartesian, ESPACES_PROJECT
 
 def _space_product(eA_eigen_vals,eB_eigen_vals):
     """ Returns a list containing the eigen-values and their multiplicities
-        of the Laplacien in the E_A X E_B manifold.
+        of -Delta (negative Laplacien) in the E_A X E_B manifold.
 
         eA_eigen_vals : [list of dict] eigen-values and their multiplicities of a manifold eA
         eB_eigen_vals : [list of dict] eigen-values and their multiplicities of a manifold eB
@@ -49,7 +49,7 @@ def _space_product(eA_eigen_vals,eB_eigen_vals):
 
 
 def s2e1(F=[0.1,0.1], c=3.4e2, j_max=1, **unusedkwargs):
-    """ Returns a list containing eigen-values of the Laplacien in the S^2 X E^1 manifold. 
+    """ Returns a list containing eigen-values of -Delta (negative Laplacien) in the S^2 X E^1 manifold. 
         c     : [float] sound velocity
         F     : [c/r, c/l] where r is the 2-sphere radious and l the length of the 1-torus
         j_max : [int] set index of eigen-values to compute as {-j_max, ..., j_max} in each direction
@@ -61,7 +61,7 @@ def s2e1(F=[0.1,0.1], c=3.4e2, j_max=1, **unusedkwargs):
 
 
 def h2e1(F=[0.1], c=3.4e2, j_max=1, kind=0, **unusedkwargs):
-    """ Returns a list containing eigen-values of the Laplacien in the H^2 X E^1 manifold. 
+    """ Returns a list containing eigen-values of -Delta (negative Laplacien) in the H^2 X E^1 manifold. 
         c     : [float] sound velocity
         F     : [list] list of length 1 containing c/l, where l is the length of the 1-torus
         j_max : [int] set index of eigen-values to compute as {-j_max, ..., j_max} in each direction
@@ -99,7 +99,7 @@ def h2e1(F=[0.1], c=3.4e2, j_max=1, kind=0, **unusedkwargs):
 
 
 def n_torus(F=[0.1], c=3.4e2, j_max=1, **unusedkwargs):
-    """ Returns a list containing eigen-values of the Laplacien in the n-torus manifold. 
+    """ Returns a list containing eigen-values of -Delta (negative Laplacien) in the n-torus manifold. 
         c     : [float] sound velocity
         F     : [list] list of length = containing c/l1, c/l2, ...; where l1, l2, ... are the n-torus lengths
         j_max : [int] set index of eigen-values to compute as {-j_max, ..., j_max} in each direction
@@ -127,7 +127,7 @@ def e1(F=[0.1], c=3.4e2, j_max=1, **unusedkwargs):
 
 
 def s2(F=[0.1], c=3.4e2, j_max=1):
-    """ Returns a list containing eigen-values of the Laplacien in the 2-sphere manifold. 
+    """ Returns a list containing eigen-values of -Delta (negative Laplacien) in the 2-sphere manifold. 
         c     : [float] sound velocity
         F     : [list] list of length 1 containing c/l, where l is the 3-sphere radious
         j_max : [int] number de eigenvalue
@@ -141,7 +141,7 @@ def s2(F=[0.1], c=3.4e2, j_max=1):
 
 
 def s3(F=[0.1], c=3.4e2, j_max=1, **unusedkwargs):
-    """ Returns a list containing eigen-values of the Laplacien in the 3-sphere manifold. 
+    """ Returns a list containing eigen-values of -Delta (negative Laplacien) in the 3-sphere manifold. 
         c     : [float] sound velocity
         F     : [list] list of length 1 containing c/r, where r is the 3-sphere radious
         j_max : [int] number de eigenvalue
