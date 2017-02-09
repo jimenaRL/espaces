@@ -8,10 +8,10 @@ var binauralFIRNode = new BinauralFIR({audioContext: audioContext});
 
 // auralizr IRs loading
 var data = {
-    'h2e1' : {'ir':'content/ir/h2e1.wav', 'image':'content/images/main/h2e1.png'},
-    's2e1' : {'ir':'content/ir/s2e1.wav', 'image':'content/images/main/s2e1.png'},
-    'e3'   : {'ir':'content/ir/e3.wav',   'image':'content/images/main/e3.png'},
-    's3'   : {'ir':'content/ir/s3.wav',   'image':'content/images/main/s3.png'},
+    'h2e1' : {'ir':'./data/ir/h2e1.wav', 'image':'content/images/main/h2e1.png'},
+    's2e1' : {'ir':'./data/ir/s2e1.wav', 'image':'content/images/main/s2e1.png'},
+    'e3'   : {'ir':'./data/ir/e3.wav',   'image':'content/images/main/e3.png'},
+    's3'   : {'ir':'./data/ir/s3.wav',   'image':'content/images/main/s3.png'},
 };
 
 if (auralizr.userMediaSupport){
