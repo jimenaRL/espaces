@@ -70,7 +70,6 @@ $(".vs1").val(0);
 //Listeners of the knobs
 $(".vs1").knob({
     'change': function(v) {
-        console.log("azimuth : " + v);
         // console.log(binauralFIRNode.getPosition().elevation);
         binauralFIRNode.setPosition(v,
                                     binauralFIRNode.getPosition().elevation,

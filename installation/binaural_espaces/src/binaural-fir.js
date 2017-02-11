@@ -53,12 +53,12 @@
     };
 
     BinauralFIR.prototype.setPosition = function (azimuth, elevation, distance) {
-        console.log(">>>>")
-        console.log("realPosition    a e d : "+azimuth+" "+elevation+" "+distance)
+        // console.log(">>>>")
+        // console.log("realPosition    a e d : "+azimuth+" "+elevation+" "+distance)
         // Calculate the nearest position for the input azimuth, elevation and distance
         var nearestPosition = this.getRealCoordinates(azimuth, elevation, distance);
-        console.log("nearestPosition a e d : "+nearestPosition.azimuth+" "+nearestPosition.elevation+" "+nearestPosition.distance)
-        console.log("<<<<")
+        // console.log("nearestPosition a e d : "+nearestPosition.azimuth+" "+nearestPosition.elevation+" "+nearestPosition.distance)
+        // console.log("<<<<")
         // console.log('state in : ' + this.state)
         if (nearestPosition.azimuth !== this.position.azimuth || 
             nearestPosition.elevation !== this.position.elevation || 
@@ -86,7 +86,7 @@
     };
 
      BinauralFIR.prototype._crossfadeTo = function(target, position) {
-         console.log('_crossfade in ' + target+' at  '+ position.distance)
+        // console.log('_crossfade in ' + target+' at  '+ position.distance)
 
         // Set the new target position
         this.position = position;
