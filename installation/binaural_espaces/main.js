@@ -8,10 +8,10 @@ var binauralFIRNode = new BinauralFIR({audioContext: audioContext});
 
 // auralizr IRs loading
 var data = {
-    'h2e1' : {'ir':'./data/ir/h2e1.wav', 'image':'content/images/main/h2e1.png'},
-    's2e1' : {'ir':'./data/ir/s2e1.wav', 'image':'content/images/main/s2e1.png'},
-    'e3'   : {'ir':'./data/ir/e3.wav',   'image':'content/images/main/e3.png'},
-    's3'   : {'ir':'./data/ir/s3.wav',   'image':'content/images/main/s3.png'},
+    'h2e1': {'ir':'./data/ir/h2e1.wav', 'image':'content/images/main/h2e1.png'},
+    's2e1': {'ir':'./data/ir/s2e1.wav', 'image':'content/images/main/s2e1.png'},
+    'e3': {'ir':'./data/ir/e3.wav',   'image':'content/images/main/e3.png'},
+    's3': {'ir':'./data/ir/s3.wav',   'image':'content/images/main/s3.png'},
 };
 
 if (auralizr.userMediaSupport){
@@ -45,6 +45,12 @@ for (var i = 0; i < hrtfs.length; i++) {
 var mediaElement = document.getElementById('source');
 var player = audioContext.createMediaElementSource(mediaElement);
 
+// player = this.audioContext.createOscillator();
+// player.start(0);
+
+
+
+
 //Set HRTF dataset
 binauralFIRNode.set_hrtfs(hrtfs);
 
@@ -53,28 +59,40 @@ binauralFIRNode.set_hrtfs(hrtfs);
 player.connect(binauralFIRNode.input);
 
 auralizr.connect(binauralFIRNode.input);
+
 binauralFIRNode.connect(audioContext.destination);
 
-// set binaural positions
-binauralFIRNode.setPosition(0, 0, 1);
+// set binaural positions (azimuth, elevation, distance)
+binauralFIRNode.setPosition(1, 0, 0.5);
+
 
 $(".vs1").val(0);
 //Listeners of the knobs
 $(".vs1").knob({
     'change': function(v) {
-        // console.log(v);
+        console.log("azimuth : " + v);
         // console.log(binauralFIRNode.getPosition().elevation);
-        // console.log(binauralFIRNode.getPosition().distance);
-        binauralFIRNode.setPosition(v, binauralFIRNode.getPosition().elevation, binauralFIRNode.getPosition().distance);
+        binauralFIRNode.setPosition(v,
+                                    binauralFIRNode.getPosition().elevation,
+                                    binauralFIRNode.getPosition().distance);
     }
 });
 
 $('.vs3').on("input", function(evt) {
-    // console.log(evt.target.value);
+    console.log("elevation : " +evt.target.value);
     // console.log(binauralFIRNode.getPosition().azimuth);
     // console.log(binauralFIRNode.getPosition().distance);
-    binauralFIRNode.setPosition(binauralFIRNode.getPosition().azimuth, evt.target.value, binauralFIRNode.getPosition().distance);
+    binauralFIRNode.setPosition(binauralFIRNode.getPosition().azimuth,
+                                evt.target.value, 
+                                binauralFIRNode.getPosition().distance);
 });
 
-
+$('.vs4').on("input", function(evt) {
+    console.log("distance : " +evt.target.value);
+    // console.log(binauralFIRNode.getPosition().azimuth);
+    // console.log(binauralFIRNode.getPosition().distance);
+    binauralFIRNode.setPosition(binauralFIRNode.getPosition().azimuth,
+                                binauralFIRNode.getPosition().elevation,
+                                evt.target.value);
+});
 

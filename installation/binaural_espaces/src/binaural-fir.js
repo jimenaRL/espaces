@@ -24,12 +24,12 @@
         this.convolverA = new ConvolverAudioGraph({
           audioContext: this.audioContext
         });
-        this.convolverA.gain.value = 1;
+        this.convolverA.rampGain.value = 1;
         this.input.connect(this.convolverA.input());
         this.convolverB = new ConvolverAudioGraph({
           audioContext: this.audioContext
         });
-        this.convolverB.gain.value = 0;
+        this.convolverB.rampGain.value = 0;
         this.input.connect(this.convolverB.input());
 
         console.log("BinauralFIR initialized.")
@@ -53,12 +53,16 @@
     };
 
     BinauralFIR.prototype.setPosition = function (azimuth, elevation, distance) {
-        console.log("in a e d : "+azimuth+" "+elevation+" "+distance)
+        console.log(">>>>")
+        console.log("realPosition    a e d : "+azimuth+" "+elevation+" "+distance)
         // Calculate the nearest position for the input azimuth, elevation and distance
         var nearestPosition = this.getRealCoordinates(azimuth, elevation, distance);
         console.log("nearestPosition a e d : "+nearestPosition.azimuth+" "+nearestPosition.elevation+" "+nearestPosition.distance)
-        console.log('state in : ' + this.state)
-        if (nearestPosition.azimuth !== this.position.azimuth || nearestPosition.elevation !== this.position.elevation || nearestPosition.distance !== this.position.distance) {
+        console.log("<<<<")
+        // console.log('state in : ' + this.state)
+        if (nearestPosition.azimuth !== this.position.azimuth || 
+            nearestPosition.elevation !== this.position.elevation || 
+            nearestPosition.distance !== this.position.distance) {
             switch (this.state) {
               case "A":
                 this.state = "A2B";
@@ -77,12 +81,12 @@
                 this.pendingPosition = nearestPosition;
                 break;
             }
-        console.log('state out : ' + this.state)
+        // console.log('state out : ' + this.state)
         } 
     };
 
      BinauralFIR.prototype._crossfadeTo = function(target, position) {
-        console.log('_crossfade from ' + target+' to '+position)
+         console.log('_crossfade in ' + target+' at  '+ position.distance)
 
         // Set the new target position
         this.position = position;
@@ -93,13 +97,15 @@
         switch (this.target) {
           case "A":
             this.convolverA.set_buffer(hrtf);
-            this.convolverB.gain().linearRampToValueAtTime(0, next);
-            this.convolverA.gain().linearRampToValueAtTime(1, next);
+            this.convolverA.distanceGain().linearRampToValueAtTime(this.position.distance, next);
+            this.convolverB.rampGain().linearRampToValueAtTime(0, next);
+            this.convolverA.rampGain().linearRampToValueAtTime(1, next);
             break;
           case "B":
             this.convolverB.set_buffer(hrtf);
-            this.convolverA.gain().linearRampToValueAtTime(0, next);
-            this.convolverB.gain().linearRampToValueAtTime(1, next);
+            this.convolverB.distanceGain().linearRampToValueAtTime(this.position.distance, next);
+            this.convolverA.rampGain().linearRampToValueAtTime(0, next);
+            this.convolverB.rampGain().linearRampToValueAtTime(1, next);
             break;
         }
         // Trigger event when linearRamp is reached
@@ -143,21 +149,34 @@
         return nearest.buffer;
     };
 
+
     BinauralFIR.prototype.sphericalToCartesian = function (azimuth, elevation, distance) {
       return {
-        x: distance * Math.sin(azimuth),
-        y: distance * Math.cos(azimuth),
+        x: distance * Math.cos(elevation) * Math.cos(azimuth),
+        y: distance * Math.cos(elevation) * Math.sin(azimuth),
         z: distance * Math.sin(elevation),
       };
     };
 
+    BinauralFIR.prototype.cartesianToSpherical = function (x, y, z) {
+      var distance_ = Math.sqrt( Math.square(x) + Math.square(y) + Math.square(z) )
+      var elevation_ = Math.asin(z/distance_);
+      var azimuth_ = Math.atan(y/z);
+      return {
+        azimuth: azimuth_,
+        elevation: elevation_,
+        distance: distance_,
+      };
+    };
+
     BinauralFIR.prototype.getRealCoordinates = function(azimuth, elevation, distance) {
-      var nearest = this.getNearestPoint(azimuth, elevation, distance);
       // Return azimuth, elevation and distance of nearest position for the input values
+      var nearest = this.getNearestPoint(azimuth, elevation, 1);
+      // hack to set distance to source
       return {
         azimuth: nearest.azimuth,
         elevation: nearest.elevation,
-        distance: nearest.distance
+        distance: distance
       };
     };
 
@@ -204,16 +223,20 @@
 
         var self = this;
         this.audioContext = options.audioContext;
-        this.gainNode = this.audioContext.createGain();
+        this.rampGainNode = this.audioContext.createGain();
+        this.distanceGainNode = this.audioContext.createGain();
+        this.distanceGainNode.gain.value = 1;
         this.convNode = this.audioContext.createConvolver();
         this.convNode.normalize = false;
-        this.gainNode.connect(this.convNode);
+
+        this.rampGainNode.connect(this.convNode);
+        this.convNode.connect(this.distanceGainNode)
 
         // Hack to force audioParam active when the source is not active
         this.oscillatorNode = this.audioContext.createOscillator();
         this.gainOscillatorNode = this.audioContext.createGain();
         this.oscillatorNode.connect(this.gainOscillatorNode);
-        this.gainOscillatorNode.connect(this.gainNode);
+        this.gainOscillatorNode.connect(this.rampGainNode);
         this.gainOscillatorNode.gain.value = 0;
         this.oscillatorNode.start(0);
 
@@ -222,7 +245,7 @@
     };
 
     ConvolverAudioGraph.prototype.connect = function(node) {
-      this.convNode.connect(node);
+      this.distanceGainNode.connect(node);
       return this;
     };
 
@@ -230,13 +253,17 @@
       this.convNode.disconnect(node);
       return this;
     };
-    
+
     ConvolverAudioGraph.prototype.input = function() {
-      return this.gainNode;
+      return this.rampGainNode;
     };
 
-    ConvolverAudioGraph.prototype.gain = function() {
-      return this.gainNode.gain;
+    ConvolverAudioGraph.prototype.rampGain = function() {
+      return this.rampGainNode.gain;
+    };
+
+    ConvolverAudioGraph.prototype.distanceGain = function() {
+      return this.distanceGainNode.gain;
     };
 
     ConvolverAudioGraph.prototype.set_buffer = function(value) {
