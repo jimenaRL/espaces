@@ -79,7 +79,7 @@
 			self.irArray[key] = loadData;
 			callback(key);
 		}
-	console.log('Auralizr loaded data: '+loadData)
+	// console.log('Auralizr loaded data: '+loadData)
 	};
 
 	Auralizr.prototype.get_audioContext = function(key) {
@@ -105,7 +105,7 @@
 			}else{
 				this.convolvers[this.activeIndex].buffer = this.irArray[key];
 			}
-			console.log('Auralizr will use: '+key)
+			// console.log('Auralizr will use: '+key)
 		}
 	};
 
