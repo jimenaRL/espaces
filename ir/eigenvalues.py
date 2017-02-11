@@ -133,7 +133,8 @@ def s2(F=[0.1], c=3.4e2, j_max=1):
         j_max : [int] number de eigenvalue
     """
     eigen_vals = [ {'value'        : 2*np.pi*(k)*(k+1)*F[0]/c,
-                    'multiplicity' : int((k+1)*(k+2)/2)}
+                    'multiplicity' : k+2,
+                    }
                     for k in range(1,j_max+1)
                  ]
 
@@ -147,7 +148,8 @@ def s3(F=[0.1], c=3.4e2, j_max=1, **unusedkwargs):
         j_max : [int] number de eigenvalue
     """
     eigen_vals = [ {'value'        : 2*np.pi*(k)*(k+2)*F[0]/c,
-                    'multiplicity' : int((k+1)*(k+2)*(k+3)/6) }
+                    'multiplicity' : (k+1)**2,
+                    }
                     for k in range(1,j_max+1)
                 ]
 
