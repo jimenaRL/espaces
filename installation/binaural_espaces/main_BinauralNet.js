@@ -25,9 +25,10 @@ for (var i = 0; i < hrtfs.length; i++) {
 // Create Audio Nodes
 var auralizr = new Auralizr({audioContext: audioContext});
 
-var binauralFIRNode = new BinauralFIR({ 
+var BinauralNet = new BinauralNet({ 
                                         audioContext: audioContext,
-                                        location: [1,1,1],
+                                        locations_coordinates: [[0,1,1],[1,0,1],[1,1,0]],
+                                        hrtfDataset: hrtfs,
                                         });
 
 if (auralizr.userMediaSupport){
@@ -44,45 +45,39 @@ if (auralizr.userMediaSupport){
     auralizr.load(data[key]['ir'], key, onAuralizrLoad);
 }
 
-//Create Audio Nodes
+// create Audio Nodes
 var mediaElement = document.getElementById('source');
 var player = audioContext.createMediaElementSource(mediaElement);
 
 // player = this.audioContext.createOscillator();
 // player.start(0);
 
-// set HRTF dataset
-binauralFIRNode.set_hrtfs(hrtfs);
+
 
 // connect Audio Nodes
-player.connect(binauralFIRNode.input);
-auralizr.connect(binauralFIRNode.input);
-binauralFIRNode.connect(audioContext.destination);
+BinauralNet.connect_from(player)
+BinauralNet.connect_from(auralizr)
+BinauralNet.connect_to(audioContext.destination);
 
 // set binaural positions (azimuth, elevation, distance)
-binauralFIRNode.setPosition(1, 0, 0.5);
+BinauralNet.setPositions(1, 0, 0.5);
+
 
 $(".vs1").val(0);
-//Listeners of the knobs
+// listeners of the knobs
 $(".vs1").knob({
     'change': function(value) {
         console.log("azimuth : " +value);
-        binauralFIRNode.setPosition(value,
-                                    binauralFIRNode.getPosition().elevation,
-                                    binauralFIRNode.getPosition().distance);
+        BinauralNet.setPositions_azimuth(value)
     }
 });
 
 $('.vs3').on("input", function(evt) {
     console.log("elevation : " +evt.target.value);
-    binauralFIRNode.setPosition(binauralFIRNode.getPosition().azimuth,
-                                evt.target.value, 
-                                binauralFIRNode.getPosition().distance);
+    BinauralNet.setPositions_elevation(evt.target.value)
 });
 
 $('.vs4').on("input", function(evt) {
     console.log("distance : " +evt.target.value);
-    binauralFIRNode.setPosition(binauralFIRNode.getPosition().azimuth,
-                                binauralFIRNode.getPosition().elevation,
-                                evt.target.value);
+    BinauralNet.setPositions_distance(evt.target.value)
 });
