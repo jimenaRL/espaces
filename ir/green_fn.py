@@ -148,12 +148,11 @@ def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate):
         value = ev_j['value']
         multiplicity = ev_j['multiplicity']
         D = nu * value
-        # use only eigen values correspondant to propagative solutions of sound equation
-        if value*nu*nu/(c*c) < 1:
-            omega = c * np.sqrt(value) * np.sqrt(1-(value*nu*nu/(c*c)))
-            # use only audible eigen vectors (humans are not able to perceive frequencies above 20000 Hz)
-            if omega < 22050:
-                green_fn_0 += multiplicity * (1/omega) * np.exp(-D*t_discret) * np.sin(omega*t_discret)
+        omega_square = c*c*value-(value*value*nu*nu)
+        # use only audible eigen values correspondant to propagative solutions of sound equation
+        if 0 < omega_square < 22050**2:
+            omega = np.sqrt(omega_square)
+            green_fn_0 += multiplicity * (1/omega) * np.exp(-D*t_discret) * np.sin(omega*t_discret)
 
     return green_fn_0
 
