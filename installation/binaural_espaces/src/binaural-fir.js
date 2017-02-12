@@ -11,7 +11,12 @@
          */
 
         var self = this;
-        this.location = options.location;
+        this.index = options.index;
+        this.tiling_cube = options.tiling_cube;
+        this.Lx = this.tiling_cube[0];
+        this.Ly = this.tiling_cube[1];
+        this.Lz = this.tiling_cube[2];
+        this.location = [this.index[0]*this.Lx, this.index[1]*this.Ly, this.index[2]*this.Lz];
         this.audioContext = options.audioContext;
         this.hrtfDataset = [];
         this.hrtfDatasetLength = 0;
@@ -33,6 +38,7 @@
         this.convolverB.rampGain.value = 0;
         this.input.connect(this.convolverB.input());
 
+
         this.connect = function(node) {
             this.convolverA.connect(node);
             this.convolverB.connect(node);
@@ -46,18 +52,80 @@
             return this;
         };
 
+
         this.distance = function(a, b) {
           // No need to compute square root here for distance comparison, this is more efficient.
           return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2);
         };
 
+
+        this.proyect_torus_cube_demi_demi = function (p) {
+          // COMMENTER
+          // location in {-1,0,1}^3
+          return {
+            x: p.x-Math.floor(p.x+0.5)+this.location[0],
+            y: p.y-Math.floor(p.y+0.5)+this.location[1],
+            z: p.z-Math.floor(p.z+0.5)+this.location[2],
+          };
+        };
+
+
+        this.proyect_torus_cube_zero_one = function (x, y, z) {
+            // COMMENTER
+            return {
+                x: x%this.Lx+this.location[0],
+                y: y%this.Ly+this.location[1],
+                z: z%this.Lz+this.location[2],
+            };
+        };
+
+        this.proyect_identity = function (x, y, z) {
+            // COMMENTER
+            return {x: x, y: y, z:z};
+        };
+
+
+        this.sphericalToCartesian = function (azimuth, elevation, distance) {
+            // Trigonometric function from Math library take degrees in radians
+          return {
+            x: distance * Math.cos(elevation * Math.PI / 180) * Math.cos(azimuth * Math.PI / 180),
+            y: distance * Math.cos(elevation * Math.PI / 180) * Math.sin(azimuth * Math.PI / 180),
+            z: distance * Math.sin(elevation * Math.PI / 180),
+          };
+        };
+
+
+        this.cartesianToSpherical = function (x, y, z) {
+            // Trigonometric function from Math library take degrees in radians
+            var distance_ = Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2));
+            return {
+                azimuth: Math.atan2(y,x) * 180 / Math.PI,
+                elevation: Math.asin(z/distance_) * 180 / Math.PI,
+                distance: distance_,
+            };
+        };
+
         this.setPosition = function (azimuth, elevation, distance) {
-            // console.log(">>>>")
-            console.log("realPosition    a e d : "+azimuth+" "+elevation+" "+distance)
+
+            // Projection onto this tiling
+            cart = this.sphericalToCartesian(azimuth, elevation, distance);
+            // cart_proy = this.proyect_torus_cube_zero_one(cart.x, cart.y, cart.z);
+            cart_proy = this.proyect_identity(cart.x, cart.y, cart.z)
+            sph_proy = this.cartesianToSpherical(cart_proy.x, cart_proy.y, cart_proy.z)
+
             // Calculate the nearest position for the input azimuth, elevation and distance
-            var nearestPosition = this.getRealCoordinates(azimuth, elevation, distance);
-            // console.log("nearestPosition a e d : "+nearestPosition.azimuth+" "+nearestPosition.elevation+" "+nearestPosition.distance)
-            // console.log("<<<<")
+            var nearestPosition = this.getRealCoordinates(sph_proy.azimuth, sph_proy.elevation, sph_proy.distance);
+
+            console.log(">>>>")
+            console.log("Index     (i, j, k): "+this.index);
+            console.log("Location  (x, y, z): "+this.location);
+            console.log("In        (a, e, d): ("+azimuth+", "+elevation+", "+distance+")");
+            console.log("In        (x, y, z): ("+cart.x+", "+cart.y+", "+cart.z+")");
+            console.log("Proyected (x, y, z): ("+cart_proy.x+", "+cart_proy.y+", "+cart_proy.z+")");
+            console.log("Proyected (a, e, d): ("+sph_proy.azimuth+", "+sph_proy.elevation+", "+sph_proy.distance+")");
+            console.log("Nearest   (a, e, d): ("+nearestPosition.azimuth+", "+nearestPosition.elevation+", "+nearestPosition.distance+")");
+            console.log("<<<<");
+
             // console.log('state in : ' + this.state)
             if (nearestPosition.azimuth !== this.position.azimuth || 
                 nearestPosition.elevation !== this.position.elevation || 
@@ -84,8 +152,13 @@
             } 
         };
 
+
         this._crossfadeTo = function(target, position) {
-            // console.log('_crossfade in ' + target+' at  '+ position.distance)
+            // console.log('_crossfade in ' + target+ ' at  '
+            //                 + position.azimuth + ' '
+            //                 + position.elevation + ' '
+            //                 + position.distance 
+            //                 )
 
             // Set the new target position
             this.position = position;
@@ -123,6 +196,7 @@
             var intervalID = window.setInterval(endRamp, 10, this);
           };
 
+
         this.setCrossfadeDuration = function(duration) {
             if (duration) {
             // Miliseconds to s
@@ -133,14 +207,17 @@
             }
         };
 
+
         this.getCrossfadeDuration = function() {
           // Seconds to ms
           return this.crossfadeDuration * 1000;
         };
 
+
         this.getPosition = function () {
           return this.position;
         };
+
 
         this.getHRTF = function (azimuth, elevation, distance) {
             var nearest = this.getNearestPoint(azimuth, elevation, distance);
@@ -148,25 +225,6 @@
             return nearest.buffer;
         };
 
-
-        this.sphericalToCartesian = function (azimuth, elevation, distance) {
-          return {
-            x: distance * Math.cos(elevation) * Math.cos(azimuth),
-            y: distance * Math.cos(elevation) * Math.sin(azimuth),
-            z: distance * Math.sin(elevation),
-          };
-        };
-
-        this.cartesianToSpherical = function (x, y, z) {
-          var distance_ = Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2));
-          var elevation_ = Math.asin(z/distance_);
-          var azimuth_ = Math.atan(y/z);
-          return {
-            azimuth: azimuth_,
-            elevation: elevation_,
-            distance: distance_,
-          };
-        };
 
         this.getRealCoordinates = function(azimuth, elevation, distance) {
           // Return azimuth, elevation and distance of nearest position for the input values
@@ -179,16 +237,15 @@
           };
         };
 
+
         this.getNearestPoint = function (azimuth, elevation, distance) {
-          // Degrees to radians for the azimuth and elevation
-          var azimuthRadians = azimuth * Math.PI / 180;
-          var elevationRadians = elevation * Math.PI / 180;
-          // Convert spherical coordinates to cartesian
-          var cartesianCoord = this.sphericalToCartesian(azimuthRadians, elevationRadians, distance);
-          // Get the nearest HRTF file for the desired position
-          var nearest = this.tree.nearest(cartesianCoord, 1)[0];
-          return nearest[0];
+            // Convert spherical coordinates to cartesian
+            var cartesianCoord = this.sphericalToCartesian(azimuth, elevation, distance);
+            // Get the nearest HRTF file for the desired position
+            var nearest = this.tree.nearest(cartesianCoord, 1)[0];
+            return nearest[0];
         };
+
 
         this.set_hrtfs = function (hrtfDataset) {
           this.hrtfDataset = hrtfDataset;
@@ -196,10 +253,7 @@
 
           for (var i = 0; i < this.hrtfDatasetLength; i++) {
             var hrtf = this.hrtfDataset[i];
-            // Azimuth and elevation to radians
-            var azimuthRadians = hrtf.azimuth * Math.PI / 180;
-            var elevationRadians = hrtf.elevation * Math.PI / 180;
-            var catesianCoord = this.sphericalToCartesian(azimuthRadians, elevationRadians, hrtf.distance);
+            var catesianCoord = this.sphericalToCartesian(hrtf.azimuth, hrtf.elevation, hrtf.distance);
             hrtf.x = catesianCoord.x;
             hrtf.y = catesianCoord.y;
             hrtf.z = catesianCoord.z;
@@ -207,12 +261,13 @@
           this.tree = new KdTree(this.hrtfDataset, this.distance, ['x', 'y', 'z']);
         };
 
+
         this.get = function () {
           return this.hrtfDataset;
         };
 
 
-        console.log("New BinauralFIR initialized at location: ["+this.location+"].")
+        console.log("New BinauralFIR initialized at index: ["+this.index+"] with location["+this.location +"].");
     };
 
     function ConvolverAudioGraph(options) {
