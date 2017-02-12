@@ -11,18 +11,20 @@
          */
 
         var self = this;
+        this.audioContext = options.audioContext;
+        this.crossfadeDuration = options.crossfadeDuration;
+        this.fog = options.fog; 
+
         this.index = options.index;
         this.tiling_cube = options.tiling_cube;
         this.Lx = this.tiling_cube[0];
         this.Ly = this.tiling_cube[1];
         this.Lz = this.tiling_cube[2];
         this.location = [this.index[0]*this.Lx, this.index[1]*this.Ly, this.index[2]*this.Lz];
-        this.audioContext = options.audioContext;
         this.hrtfDataset = [];
         this.hrtfDatasetLength = 0;
         this.tree = undefined;
         this.position = {};
-        this.crossfadeDuration = 0.02;
         this.input = this.audioContext.createGain();
         this.state = "A"; // States in ["A", "B", "A2B", "B2A"]
         this.target = undefined;
@@ -149,7 +151,9 @@
                     break;
                 }
             // console.log('state out : ' + this.state)
-            } 
+            }
+
+            return nearestPosition
         };
 
 
@@ -169,13 +173,20 @@
             switch (this.target) {
               case "A":
                 this.convolverA.set_buffer(hrtf);
-                this.convolverA.distanceGain().linearRampToValueAtTime(this.position.distance, next);
+                this.convolverA.distanceGain().exponentialRampToValueAtTime(
+                      Math.exp(-this.fog * this.position.distance),
+                      next
+                    );
                 this.convolverB.rampGain().linearRampToValueAtTime(0, next);
                 this.convolverA.rampGain().linearRampToValueAtTime(1, next);
                 break;
               case "B":
                 this.convolverB.set_buffer(hrtf);
-                this.convolverB.distanceGain().linearRampToValueAtTime(this.position.distance, next);
+                console.log(Math.exp(-this.fog * this.position.distance));
+                this.convolverB.distanceGain().exponentialRampToValueAtTime(
+                        Math.exp(-this.fog * this.position.distance),
+                        next
+                      );
                 this.convolverA.rampGain().linearRampToValueAtTime(0, next);
                 this.convolverB.rampGain().linearRampToValueAtTime(1, next);
                 break;

@@ -20,7 +20,7 @@
         </br>
 
         <pre> Elevation </pre>
-        <input ame="elevationIn" id="elevationInId" type="range" min="-40" max="90" step="0.5" value="0" class="vs3"
+        <input ame="elevationIn" id="elevationInId" type="range" min="-40" max="90" step="0.5" class="vs3"
         oninput="elevationOutId.value = elevationInId.value"/>
         </br>
         <output name="elevationOut" id="elevationOutId"> </output>
@@ -28,7 +28,7 @@
         </br>
 
         <pre> Distance </pre>
-        <input name="distanceIn" id="distanceInId" type="range" min="0.01" max="1" step="0.01" value="0.5" class="vs4" 
+        <input name="distanceIn" id="distanceInId" type="range" min="1" max="100" step="1"  class="vs4" 
         oninput="distanceOutId.value = distanceInId.value"/>
         </br>
         <output name="distanceOut" id="distanceOutId"> </output>
@@ -39,8 +39,8 @@
     <script src="./src/auralizr.js" type="text/javascript"></script>
     <script src="./src/binaural-fir.js" type="text/javascript"></script>
     <script src="./src/binaural-net.js" type="text/javascript"></script>
-    <!-- <script src="./main.js" type="text/javascript"></script> -->
-    <script src="./main_BinauralNet.js" type="text/javascript"></script>
+    <script src="./main.js" type="text/javascript"></script>
+    <!-- <script src="./main_BinauralNet.js" type="text/javascript"></script> -->
 
 
 </body>
