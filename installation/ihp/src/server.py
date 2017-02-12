@@ -1,5 +1,10 @@
 import os, sys
+import json
 import types
+import traceback
+
+ir_path = os.path.join(os.path.realpath(os.path.join(os.path.abspath(__file__), os.pardir, os.pardir, os.pardir)), "ir")
+sys.path.append(ir_path)
 
 from espaces import EspaceClient
 espace_client = EspaceClient()
@@ -15,28 +20,33 @@ def handle_timeout(self):
 
 def espaces_callback(path, tags, args, source):
 
-    msg_string = ""
-    msg_string += "\n\tpath   : %s" % path
-    msg_string += "\n\ttags   : %s" % tags
-    msg_string += "\n\targs   : %s" % args
-    msg_string += "\n\tsource :%s" % str(source)
-    print "OSCServer received: %s\nfrom %s.\n" % (msg_string, getUrlStr(source))
+    try:
+        msg_string = ""
+        msg_string += "\n\tpath   : %s" % path
+        msg_string += "\n\ttags   : %s" % tags
+        msg_string += "\n\targs   : %s" % args
+        msg_string += "\n\tsource :%s" % str(source)
+        print "OSCServer received: %s\nfrom %s.\n" % (msg_string, getUrlStr(source))
 
-    ir_params = {  'duration'      : float(args[4]),
-                   'nu'            : float(args[5]),
-                   'sampling_rate' : float(args[6]),
-                   'ev_params'     : {'space': str(args[1]), 'c':float(args[2]), 'j_max':int(args[3]),'F':list(args[7:])},
-                }
+        ir_params = {  'duration'      : float(args[4]),
+                       'nu'            : float(args[5]),
+                       'sampling_rate' : float(args[6]),
+                       'ev_params'     : {'space': str(args[1]), 'c':float(args[2]), 'j_max':int(args[3]),'F':list(args[7:])},
+                    }
 
-    command = espace_client.handle_request(ir_params)
+        command = espace_client.handle_request(ir_params)
 
-    # send reply to the client
-    reply_port = int(args[0])
-    reply_addresse = (source[0], reply_port)
-    msg = OSCMessage("/pd")
-    msg.append(command['saved_audio_path'])
-    server.client.sendto(msg,reply_addresse,timeout=1)
-    print "OSCServer send:\n\t%s\nto %s.\n" %(msg,reply_addresse)
+        # send reply to the client
+        reply_port = int(args[0])
+        reply_addresse = (source[0], reply_port)
+        msg = OSCMessage("/pd")
+        msg.append(command['saved_audio_path'])
+        server.client.sendto(msg,reply_addresse,timeout=1)
+        print "OSCServer send:\n\t%s\nto %s.\n" %(msg,reply_addresse)
+    except Exception as ex:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print traceback.print_exc()
+        print json.dumps({"error" : "Error on server side at line {}: {}".format(exc_tb.tb_lineno, ex)})
 
     return OSCMessage("/")
 

@@ -11,7 +11,7 @@ from datetime import date
 
 import numpy as np
 
-ESPACES_PROJECT = os.environ['ESPACES_PROJECT']
+ESPACES_PROJECT = os.path.realpath(os.path.join(os.path.abspath(__file__), os.pardir, os.pardir,os.pardir))
 
 def cartesian(arrays,  out=None):
     """

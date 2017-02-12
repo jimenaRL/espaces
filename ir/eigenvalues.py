@@ -132,7 +132,7 @@ def s2(F=[0.1], c=3.4e2, j_max=1):
         F     : [list] list of length 1 containing c/l, where l is the 3-sphere radious
         j_max : [int] number de eigenvalue
     """
-    eigen_vals = [ {'value'        : 2*np.pi*(k)*(k+1)*F[0]/c,
+    eigen_vals = [ {'value'        : (2*np.pi*F[0]/c)**2 *(k)*(k+1),
                     'multiplicity' : k+2,
                     }
                     for k in range(1,j_max+1)
@@ -147,7 +147,7 @@ def s3(F=[0.1], c=3.4e2, j_max=1, **unusedkwargs):
         F     : [list] list of length 1 containing c/r, where r is the 3-sphere radious
         j_max : [int] number de eigenvalue
     """
-    eigen_vals = [ {'value'        : 2*np.pi*(k)*(k+2)*F[0]/c,
+    eigen_vals = [ {'value'        : (2*np.pi*F[0]/c)**2  * (k)*(k+2),
                     'multiplicity' : (k+1)**2,
                     }
                     for k in range(1,j_max+1)
