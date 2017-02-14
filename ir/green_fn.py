@@ -15,7 +15,7 @@ from joblib import Memory
 
 from ee_utils import ESPACES_PROJECT, cartesian
 
-def compute_green_fn_cube(c,nu,F,j_max,duration,sampling_rate):
+def compute_green_fn_cube(c,nu,F,j_max,duration,sampling_rate,**kwargs):
     """ Returns the Green function of the wave equation in a perfect cube of size L.
 
         x_t             : [3-tuple] source position
@@ -60,7 +60,7 @@ def compute_green_fn_cube(c,nu,F,j_max,duration,sampling_rate):
 
     return green_fn_0
 
-def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate):
+def compute_green_fn(c,nu,eigen_vals,duration,sampling_rate, **kwargs):
     """ Returns the Green function at x=0 of the wave equation 
         in a manifold M defined by its eigen-values.
 

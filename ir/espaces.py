@@ -27,7 +27,6 @@ class EspaceClient(object):
         saved_audio_path = espaces(ir_params)
         return {'saved_audio_path':saved_audio_path}
 
-
 def espaces(ir_params):
 
     # set save paths results
