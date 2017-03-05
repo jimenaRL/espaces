@@ -10,7 +10,7 @@
 import copy
 
 from eigenvalues import get_eigenvalues
-from green_fn import compute_green_fn, compute_green_fn_cube
+from green_fn import compute_green_fn
 from signals import Signal
 
 
@@ -47,14 +47,11 @@ def get_ir(ir_params):
     eigen_vals, ev_params = get_eigenvalues(ir_params['ev_params'])
     ir_params_ = copy.deepcopy(ir_params)
     ir_params_.update({'eigen_vals':eigen_vals, 'c':ev_params['c']})
+    del ir_params_['ev_params']
 
-    ir_params_.update(ev_params)
+    green_fn_0 = compute_green_fn(**ir_params_)
 
-
-    # green_fn = compute_green_fn(**ir_params_)
-    green_fn = compute_green_fn_cube(**ir_params_)
-
-    sig_gf = Signal(green_fn,fs=ir_params_['sampling_rate'],mono=True,normalize=True)
+    sig_gf = Signal(green_fn_0,fs=ir_params_['sampling_rate'],mono=True,normalize=True)
 
     return sig_gf, eigen_vals
 
