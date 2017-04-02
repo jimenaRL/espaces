@@ -1,14 +1,14 @@
 import os
 
 from flask import Flask, redirect, url_for
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
-PORT = 80
-HOST = "192.168.0.48"
-DEBUG = False
+PORT = 443
+HOST = "127.0.0.1"
+DEBUG = True
 
 # Use SSH. Set a context with crt and key files and path it to app.run()
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),

@@ -41,6 +41,21 @@
     }
 }
 
+
+/* style */
+
+a:link {
+    color: white;
+    font-size:60%;
+    background-color: transparent;
+    font-style: italic;
+    text-decoration: none;
+    }
+
+a:visited {
+    text-decoration: none;
+}
+
 /* structure */
 
 body {
@@ -53,12 +68,18 @@ body {
 }
 
 
-#main {
-            width: 100%;
-            float: left;
-            height: 88vh;
-            padding : 5vh;
-          }
+#header {
+    width: 100%;
+    height: auto;
+    padding-top: 5vh;
+    padding-left: 6.5vw;
+    padding-bottom: 1vh;
+}
+
+.header {
+    width: 80%;
+}
+
 
 #navigation {
               width: 100%;
@@ -68,11 +89,14 @@ body {
 
 
 #main img {
-    width: 100%;
+    width: 85%;
     display: block;
     margin-left: auto;
     margin-right: auto;
     height: auto;
+    padding-left: 2vh;
+    padding-right: 2vh;
+    padding-bottom: 12vh;
 }
 
 
@@ -109,40 +133,38 @@ body {
     height: 10vh;
 }
 
-.places span.s3 {
-    background:url('navigation/s3.png');
-    background-repeat: no-repeat;
-    background-size: 40px 40px;
-    background-position: center;
-    padding-bottom : 5vh;
-}
-
-
 .places span.e3 {
     background:url('navigation/e3.png');
     background-repeat: no-repeat;
-    background-size: 48px 40px;
+    background-size: 206px 74px;
     background-position: center;
-    padding-bottom : 5vh;
+    padding-bottom : 15vh;
 }
 
 .places span.s2e1 {
     background:url('navigation/s2e1.png');
     background-repeat: no-repeat;
-    background-size: 132px 40px;
+    background-size: 301px 74px;
     background-position: center;
-    padding-bottom : 5vh;
+    padding-bottom : 15vh;
 }
 
 
 .places span.h2e1 {
     background-image:url('navigation/h2e1.png');
     background-repeat: no-repeat;
-    background-size: 144px 40px;
+    background-size: 301px 74px;
     background-position: center;
-    padding-bottom : 5vh;
+    padding-bottom : 15vh;
 }
 
+.places span.s3 {
+    background:url('navigation/s3.png');
+    background-repeat: no-repeat;
+    background-size: 206px 74px;
+    background-position: center;
+    padding-bottom : 15vh;
+}
 
 .places span:hover,
 .places span.enabled {

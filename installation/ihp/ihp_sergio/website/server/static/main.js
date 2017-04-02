@@ -1,10 +1,10 @@
 var auralizr = new Auralizr();
 
 var data = {
-    'h2e1' : {'ir':'content/ir/ecm_20160719/h2e1.wav', 'image':'content/images/main/h2e1.png'},
-    's2e1' : {'ir':'content/ir/ecm_20160719/s2e1.wav', 'image':'content/images/main/s2e1.png'},
-    'e3'   : {'ir':'content/ir/ecm_20160719/e3.wav',   'image':'content/images/main/e3.png'},
-    's3'   : {'ir':'content/ir/ecm_20160719/s3.wav',   'image':'content/images/main/s3.png'},
+    'h2e1' : {'ir':'content/ir/paris/h2e1.wav', 'image':'content/images/h2e1.png'},
+    's2e1' : {'ir':'content/ir/paris/s2e1.wav', 'image':'content/images/s2e1.png'},
+    'e3'   : {'ir':'content/ir/paris/e3.wav',   'image':'content/images/e3.png'},
+    's3'   : {'ir':'content/ir/paris/s3.wav',   'image':'content/images/s3.png'},
 };
 
 var play  = '▶';
@@ -40,8 +40,8 @@ function enableThisSpan(element){
 function enableClickFunctionality(url_str,element,key){
     element.addEventListener('click',function(event){
 
-        console.log('load image from '+url_str)
-        document.getElementById('img_main').src = url_str
+        console.log('load image from '+url_str);
+        document.getElementById('img_main').src = url_str;
 
         if (element.innerHTML === play){
             resetAllSpans();
