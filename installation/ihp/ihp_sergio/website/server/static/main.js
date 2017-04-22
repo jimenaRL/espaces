@@ -1,3 +1,9 @@
+if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    console.error('Votre explorateur ne supporte pas toutes les funcitonalities necessaires pour ce site. Vous pouvez utiliser Chrome ou Firefox.');
+    var img_main = document.getElementById('img_main');
+    img_main.src = "content/images/start_bad_browser.png";
+}
+
 var auralizr = new Auralizr();
 
 var data = {
