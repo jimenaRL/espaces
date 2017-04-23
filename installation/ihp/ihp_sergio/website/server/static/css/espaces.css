@@ -35,12 +35,6 @@
 .col-11 {width: 91.66%;}
 .col-12 {width: 100%;}
 
-@media only screen and (max-width: 768px) {
-    [class*="col-"] {
-        width: 100%;
-    }
-}
-
 
 /* style */
 
@@ -136,34 +130,34 @@ body {
 .places span.e3 {
     background:url('navigation/e3.png');
     background-repeat: no-repeat;
-    background-size: 206px 74px;
+    background-size: 20vw 7.184vw;
     background-position: center;
-    padding-bottom : 15vh;
+    padding-bottom : 20vh;
 }
 
 .places span.s2e1 {
     background:url('navigation/s2e1.png');
     background-repeat: no-repeat;
-    background-size: 301px 74px;
+    background-size: 30vw 7.375vw;
     background-position: center;
-    padding-bottom : 15vh;
+    padding-bottom : 20vh;
 }
 
 
 .places span.h2e1 {
     background-image:url('navigation/h2e1.png');
     background-repeat: no-repeat;
-    background-size: 301px 74px;
+    background-size: 30vw 7.375vw;
     background-position: center;
-    padding-bottom : 15vh;
+    padding-bottom : 20vh;
 }
 
 .places span.s3 {
     background:url('navigation/s3.png');
     background-repeat: no-repeat;
-    background-size: 206px 74px;
+    background-size: 20vw 7.184vw;
     background-position: center;
-    padding-bottom : 15vh;
+    padding-bottom : 20vh;
 }
 
 .places span:hover,
@@ -173,4 +167,19 @@ body {
     -webkit-transform: translateY(-3px)
 }
 
+
+@media screen and (max-width: 480px) {
+    .places span.s3 {
+        font-size : 3vw;
+    }
+    .places span.h2e1 {
+        font-size : 3vw;
+    }
+    .places span.s2e1 {
+        font-size : 3vw;
+    }
+    .places span.e3 {
+        font-size : 3vw;
+    }
+}
 
