@@ -25,9 +25,56 @@ for (var i = 0; i < hrtfs.length; i++) {
 // Create Audio Nodes
 var auralizr = new Auralizr({audioContext: audioContext});
 
+// locations in {-1,0}^3
+var tiling_torus_cube_zero_one = [
+                                    [-1, -1, -1],
+                                    [-1, -1, 0],
+                                    [-1, 0, -1],
+                                    [-1, 0, 0],
+                                    [0, -1, -1],
+                                    [0, -1, 0],
+                                    [0, 0, -1],
+                                    [0, 0, 0],
+                                ];
+
+// location in {-1,0,1}^3
+var tiling_torus_cube_half_half = [
+                                    [-1, -1, -1],
+                                    [-1, -1, 0],
+                                    [-1, -1, 1],
+                                    [-1, 0, -1],
+                                    [-1, 0, 0],
+                                    [-1, 0, 1],
+                                    [-1, 1, -1],
+                                    [-1, 1, 0],
+                                    [-1, 1, 1],
+                                    [0, -1, -1],
+                                    [0, -1, 0],
+                                    [0, -1, 1],
+                                    [0, 0, -1],
+                                    [0, 0, 0],
+                                    [0, 0, 1],
+                                    [0, 1, -1],
+                                    [0, 1, 0],
+                                    [0, 1, 1],
+                                    [1, -1, -1],
+                                    [1, -1, 0],
+                                    [1, -1, 1],
+                                    [1, 0, -1],
+                                    [1, 0, 0],
+                                    [1, 0, 1],
+                                    [1, 1, -1],
+                                    [1, 1, 0],
+                                    [1, 1, 1],
+                                ];
+
+
+no_periodicty = [[1,0,2]];
+
 var BinauralNet = new BinauralNet({ 
                                         audioContext: audioContext,
-                                        locations_coordinates: [[0,1,1],[1,0,1],[1,1,0]],
+                                        tiling_cube : [1, 1, 1],
+                                        index_list: no_periodicty,
                                         hrtfDataset: hrtfs,
                                         });
 
@@ -49,18 +96,20 @@ if (auralizr.userMediaSupport){
 var mediaElement = document.getElementById('source');
 var player = audioContext.createMediaElementSource(mediaElement);
 
-// player = this.audioContext.createOscillator();
-// player.start(0);
+var osc = this.audioContext.createOscillator();
+// osc.start(0);
 
 
 
 // connect Audio Nodes
 BinauralNet.connect_from(player)
-BinauralNet.connect_from(auralizr)
+// BinauralNet.connect_from(auralizr)
+BinauralNet.connect_from(osc)
+
 BinauralNet.connect_to(audioContext.destination);
 
 // set binaural positions (azimuth, elevation, distance)
-BinauralNet.setPositions(1, 0, 0.5);
+BinauralNet.setPositions(1, 0.1, 0.5);
 
 
 $(".vs1").val(0);

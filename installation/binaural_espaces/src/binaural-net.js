@@ -5,25 +5,25 @@
         var self = this;
         this.audioContext = options.audioContext;
         this.hrtfDataset = options.hrtfDataset;
-        this.locations_coordinates = options.locations_coordinates;
+        this.index_list = options.index_list;
+        this.tiling_cube = options.tiling_cube;
 
         // creates locations
         this.locations = []
-        for (var i = 0; i < this.locations_coordinates.length; i++) {
+        for (var i = 0; i < this.index_list.length; i++) {
             var binauralFIRNode = new BinauralFIR({ 
                                         audioContext: this.audioContext,
-                                        location: this.locations_coordinates[i],
+                                        index: this.index_list[i],
+                                        tiling_cube : this.tiling_cube,
                                         });
             binauralFIRNode.set_hrtfs(this.hrtfDataset);
             binauralFIRNode.setPosition(1, 0, 0.5);
-            console.log()
             this.locations.push(binauralFIRNode)
         }
 
         this.setPositions = function (azimuth, elevation, distance) {
             for (var i = 0; i < this.locations.length; i++) {
                 binauralFIRNode = this.locations[i]
-                console.log(binauralFIRNode)
                 binauralFIRNode.setPosition(azimuth, elevation, distance);
             }
         };
@@ -79,7 +79,7 @@
             }
         };
 
-        console.log("BinauralNet initialized.")
+        console.log("New BinauralNet initialized with tiling_cube ["+this.tiling_cube +"].");
 
     };
 

@@ -35,17 +35,14 @@ var binauralFIRNode = new BinauralFIR({
 binauralFIRNode.set_hrtfs(hrtfs);
 binauralFIRNode.connect(audioContext.destination);
 
-var firstPosition = { azimuth: 0,  elevation: 0,  distance: 0.5,};
+var firstPosition = { x:1,  y:1,  z:1};
 
-binauralFIRNode.setPosition(firstPosition.azimuth,
-                            firstPosition.elevation,
-                            firstPosition.distance
-                            );
+binauralFIRNode.setPositionCart(1,1,1);
 
 
-var use_oscillator = false;
+var use_oscillator = true;
 var use_player = false;
-var use_auralizr = true;
+var use_auralizr = false;
 
 /// auralizr
 if (use_auralizr==true) {
@@ -82,30 +79,12 @@ if (use_oscillator==true) {
 
 
 // controls 
-$(".vs1").val(firstPosition.azimuth);
-$(".vs3").val(firstPosition.elevation);
-$(".vs4").val(firstPosition.distance);
+$(".vsX").val(firstPosition.x);
 
-//Listeners of the knobs
-$(".vs1").knob({
-    'change': function(value) {
-        console.log("azimuth : " +value);
-        nearestPosition = binauralFIRNode.setPosition(value,
-                                    binauralFIRNode.getPosition().elevation,
-                                    binauralFIRNode.getPosition().distance);
-    }
-});
-
-$('.vs3').on("input", function(evt) {
+$('.vsX').on("input", function(evt) {
     console.log("elevation : " +evt.target.value);
-    nearestPosition = binauralFIRNode.setPosition(binauralFIRNode.getPosition().azimuth,
-                                evt.target.value, 
-                                binauralFIRNode.getPosition().distance);
-});
-
-$('.vs4').on("input", function(evt) {
-    console.log("distance : " +evt.target.value);
-    nearestPosition = binauralFIRNode.setPosition(binauralFIRNode.getPosition().azimuth,
-                                binauralFIRNode.getPosition().elevation,
-                                evt.target.value);
+    nearestPosition = binauralFIRNode.setPositionCart(
+                                evt.target.value,
+                                binauralFIRNode.getPositionCart().y,
+                                binauralFIRNode.getPositionCart().z);
 });

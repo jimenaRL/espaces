@@ -13,7 +13,7 @@
         var self = this;
         this.audioContext = options.audioContext;
         this.crossfadeDuration = options.crossfadeDuration;
-        this.fog = options.fog; 
+        this.fog = options.fog;
 
         this.index = options.index;
         this.tiling_cube = options.tiling_cube;
@@ -107,6 +107,51 @@
             };
         };
 
+
+        this.setPositionCart = function (x, y, z) {
+        
+            cart_proy = this.proyect_identity(x, y, z);
+            sph_proy = this.cartesianToSpherical(cart_proy.x, cart_proy.y, cart_proy.z);
+            // Calculate the nearest position for the input azimuth, elevation and distance
+            var nearestPosition = this.getRealCoordinates(sph_proy.azimuth, sph_proy.elevation, sph_proy.distance);
+
+            console.log(">>>>")
+            console.log("Index     (i, j, k): "+this.index);
+            console.log("Location  (x, y, z): "+this.location);
+            console.log("In        (x, y, z): ("+x+", "+y+", "+z+")");
+            console.log("Proyected (x, y, z): ("+cart_proy.x+", "+cart_proy.y+", "+cart_proy.z+")");
+            console.log("Nearest   (a, e, d): ("+nearestPosition.azimuth+", "+nearestPosition.elevation+", "+nearestPosition.distance+")");
+            console.log("<<<<");
+
+            // console.log('state in : ' + this.state)
+            if (nearestPosition.azimuth !== this.position.azimuth || 
+                nearestPosition.elevation !== this.position.elevation || 
+                nearestPosition.distance !== this.position.distance) {
+                switch (this.state) {
+                  case "A":
+                    this.state = "A2B";
+                    this.pendingPosition = undefined;
+                    this._crossfadeTo("B", nearestPosition);
+                    break;
+                  case "B":
+                    this.state = "B2A";
+                    this.pendingPosition = undefined;
+                    this._crossfadeTo("A", nearestPosition);
+                    break;
+                  case "A2B":
+                    this.pendingPosition = nearestPosition;
+                    break;
+                  case "B2A":
+                    this.pendingPosition = nearestPosition;
+                    break;
+                }
+            // console.log('state out : ' + this.state)
+            }
+
+            return nearestPosition
+        };
+
+
         this.setPosition = function (azimuth, elevation, distance) {
 
             // Projection onto this tiling
@@ -174,7 +219,7 @@
               case "A":
                 this.convolverA.set_buffer(hrtf);
                 this.convolverA.distanceGain().exponentialRampToValueAtTime(
-                      Math.exp(-this.fog * this.position.distance),
+                      this.position.distance,
                       next
                     );
                 this.convolverB.rampGain().linearRampToValueAtTime(0, next);
@@ -182,9 +227,8 @@
                 break;
               case "B":
                 this.convolverB.set_buffer(hrtf);
-                console.log(Math.exp(-this.fog * this.position.distance));
                 this.convolverB.distanceGain().exponentialRampToValueAtTime(
-                        Math.exp(-this.fog * this.position.distance),
+                        this.position.distance,
                         next
                       );
                 this.convolverA.rampGain().linearRampToValueAtTime(0, next);
@@ -229,6 +273,13 @@
           return this.position;
         };
 
+        this.getPositionCart = function () {
+          return this.sphericalToCartesian(  this.position.azimuth,
+                                        this.position.elevation,
+                                        this.position.distance
+                                    );
+        };
+
 
         this.getHRTF = function (azimuth, elevation, distance) {
             var nearest = this.getNearestPoint(azimuth, elevation, distance);
@@ -240,11 +291,11 @@
         this.getRealCoordinates = function(azimuth, elevation, distance) {
           // Return azimuth, elevation and distance of nearest position for the input values
           var nearest = this.getNearestPoint(azimuth, elevation, 1);
-          // hack to set distance to source
+          // hack to set distance to source in 3D
           return {
             azimuth: nearest.azimuth,
             elevation: nearest.elevation,
-            distance: distance
+            distance: Math.exp(-this.fog * distance),
           };
         };
 
