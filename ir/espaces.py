@@ -31,7 +31,8 @@ def espaces(ir_params):
     # set save paths results
     path_kwargs = copy.deepcopy(ir_params['ev_params'])
     path_kwargs.update({'duration': ir_params['duration'],
-                        'nu': ir_params['nu']})
+                        'nu': ir_params['nu'],
+                        'sr': ir_params['sampling_rate']})
     paths = get_paths(**path_kwargs)
 
     au_path = paths.get('audio')
