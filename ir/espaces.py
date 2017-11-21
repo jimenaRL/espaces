@@ -56,6 +56,6 @@ def espaces(ir_params):
             ir_signal.save_image(paths['image'], title='impulse response')
 
     else:
-        print "Audio file found at %s." % au_path
+        print "Audio file found at %s." % paths['audio']
 
-    return au_path
+    return paths

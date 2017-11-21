@@ -1,11 +1,12 @@
-#import pyaudio
+
 import sys
 import os
 
 import numpy as np
 
-#import librosa
+import librosa
 from moviepy.audio.io import ffmpeg_audiowriter
+
 
 class Signal():
 
