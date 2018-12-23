@@ -16,6 +16,7 @@ ESPACES_PROJECT = os.path.realpath(os.path.join(os.path.abspath(__file__),
                                                 os.pardir,
                                                 os.pardir))
 
+print("ESPACES_PROJECT = %s" % ESPACES_PROJECT)
 
 def cartesian(arrays,  out=None):
     """
