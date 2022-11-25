@@ -109,7 +109,7 @@ class Signal():
             self.crop(crop[0], crop[1])
 
         if normalize & (self.length > 0):
-            print "Normalizing Signal"
+            print("Normalizing Signal")
             norm = self.data.max()
             self.data = self.data.astype(float) / float(norm)
             self.is_normalized = True
@@ -177,10 +177,10 @@ class Signal():
         if (stop < 0):
             raise ValueError("Stop time (%1.2fs) is less than 0" % (stop))
         if (start < 0):
-            print "WARNING : Start time (%1.2fs) should be greater than 0" % start
+            print("WARNING : Start time (%1.2fs) should be greater than 0" % start)
             start = 0
         if (stop * self.fs > self.length):
-            print "WARNING : Stop time (%1.2fs) should not be greater than the signal duration (%1.2fs)." %(stop, self.get_duration())
+            print("WARNING : Stop time (%1.2fs) should not be greater than the signal duration (%1.2fs)." % (stop, self.get_duration()))
             stop = self.get_duration()
 
         self.data = self.data[start * self.fs: stop * self.fs, :]
@@ -216,11 +216,11 @@ class Signal():
         try:
             import pyaudio
         except ImportError:
-            print "WARNING: PyAudio (https://people.csail.mit.edu/hubert/pyaudio/) is needed for playback."
+            print("WARNING: PyAudio (https://people.csail.mit.edu/hubert/pyaudio/) is needed for playback.")
             return
         p = pyaudio.PyAudio()
 
-        if sys.platform=='darwin' and self.fs == 22050:
+        if sys.platform == 'darwin' and self.fs == 22050:
             sig_to_play = self.copy()
             sig_to_play.resample(44100)
         else:
@@ -235,7 +235,7 @@ class Signal():
                 * (2.**14.)).astype(np.int16).tostring()
 
         if verbose:
-            print "Start playing. (CTL+C should work for interrupting)."
+            print("Start playing. (CTL+C should work for interrupting).")
 
         for t in xrange(0, len(data), BUFFER_SIZE):
             stream.write(data[t:t + BUFFER_SIZE])
@@ -247,7 +247,7 @@ class Signal():
         if verbose:
             sys.stdout.write("\r")
             sys.stdout.flush()
-            print ""
+            print("")
 
         stream.stop_stream()
         stream.close()

@@ -43,7 +43,7 @@ def espaces(ir_params):
         ir_signal, eigen_vals = get_ir(ir_params)
         # save ir audio
         ir_signal.write(au_path)
-        print "Audio file saved at %s." % au_path
+        print("Audio file saved at %s." % au_path)
 
         # save eigenvalues
         if 'evs' in paths:
@@ -56,6 +56,6 @@ def espaces(ir_params):
             ir_signal.save_image(paths['image'], title='impulse response')
 
     else:
-        print "Audio file found at %s." % paths['audio']
+        print("Audio file found at %s." % paths['audio'])
 
     return paths
