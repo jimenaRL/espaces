@@ -45,7 +45,7 @@ def test_compute_green_fn():
 
 def test_espaces():
     ir_params = {
-        'ev_params': {'space': 'e3', 'F': [0.1], 'j_max': 1},
+        'ev_params': {'space': 'e3', 'F': [0.1, 0.2, 0.3], 'j_max': 1},
         'duration': 0.01,
         'nu': 1.7e-5,
         'sampling_rate': 44100,
